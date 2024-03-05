@@ -33,5 +33,6 @@ namespace DefaultNamespace
         public float GetHealth() => _health;
 
         public bool IsAlive() => GetHealth() > 0;
+        //
     }
 }
