@@ -8,6 +8,8 @@ public class PlayerMovement : MonoBehaviour
 
     //
     private Vector2 _input;
+    //
+    public float movementSpeed;
 
     //
     private Rigidbody _playerRigidbody;
@@ -20,7 +22,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         FetchInput();
-        _playerRigidbody.velocity = _input * (50 * Time.fixedDeltaTime);
+        _playerRigidbody.velocity = _input * (movementSpeed * (1/Time.deltaTime) * Time.deltaTime);
     }
 
     private void OnEnable()
