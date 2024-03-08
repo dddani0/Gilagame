@@ -13,7 +13,6 @@ namespace DefaultNamespace
 
         private void Update()
         {
-            Debug.Log(GetHealth());
             if (!IsAlive())
                 PlayerDeath?.Invoke();
         }

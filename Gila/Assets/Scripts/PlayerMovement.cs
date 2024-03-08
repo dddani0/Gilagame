@@ -1,18 +1,24 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public InputAction playerMove;
-
-    //
+    [FormerlySerializedAs("playerMove")] public InputAction move;
     private Vector2 _input;
-    //
     public float movementSpeed;
-
-    //
     private Rigidbody _playerRigidbody;
+
+    private void OnEnable()
+    {
+        move.Enable();
+    }
+
+    private void OnDisable()
+    {
+        move.Disable();
+    }
 
     void Start()
     {
@@ -22,22 +28,12 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         FetchInput();
-        _playerRigidbody.velocity = _input * (movementSpeed * (1/Time.deltaTime) * Time.deltaTime);
+        _playerRigidbody.velocity = _input * (movementSpeed * (1 / Time.deltaTime) * Time.deltaTime);
     }
 
-    private void OnEnable()
-    {
-        playerMove.Enable();
-    }
-
-    private void OnDisable()
-    {
-        playerMove.Disable();
-    }
 
     private void FetchInput()
     {
-        _input = playerMove.ReadValue<Vector2>();
+        _input = move.ReadValue<Vector2>();
     }
-    //
 }
