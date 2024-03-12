@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [FormerlySerializedAs("playerMove")] public InputAction move;
     private Vector2 _input;
     public float movementSpeed;
-    private Rigidbody _playerRigidbody;
+    private Rigidbody2D _playerPhysicsRigidbody;
 
     private void OnEnable()
     {
@@ -22,13 +22,13 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        _playerRigidbody = GetComponent<Rigidbody>();
+        _playerPhysicsRigidbody = GetComponent<Rigidbody2D>();
     }
 
     void Update()
     {
         FetchInput();
-        _playerRigidbody.velocity = _input * (movementSpeed * (1 / Time.deltaTime) * Time.deltaTime);
+        _playerPhysicsRigidbody.velocity = _input * (movementSpeed * (1 / Time.deltaTime) * Time.deltaTime);
     }
 
 

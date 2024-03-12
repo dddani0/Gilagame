@@ -7,15 +7,19 @@ namespace DefaultNamespace
     {
         private float _speed = 15f;
         private Rigidbody _bulletRigidbody;
+        private int damage;
 
         private void Start()
         {
             _bulletRigidbody = GetComponent<Rigidbody>();
+            Destroy(this,5f);
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            _bulletRigidbody.velocity = transform.up * 15f;
+            _bulletRigidbody.velocity = transform.up * (_speed * (1/ Time.deltaTime));
         }
+
+        public int GetDamage() => damage;
     }
 }
