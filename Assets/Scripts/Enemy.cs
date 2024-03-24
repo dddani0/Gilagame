@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour, IEntity
     //
 
     private bool _isDetected = false;
+    private LayerMask _playerLayer = 6;
 
 
     private void Start()
@@ -27,14 +28,16 @@ public class Enemy : MonoBehaviour, IEntity
         _agent.speed = origin.speed;
         _health = origin.health;
         _spriteTransform = transform.GetChild(0);
+        print(_spriteTransform.gameObject);
     }
 
     private void Update()
     {
+        if (IsAlive() is false) return;
         if (_isDetected is false) return;
-        _agent.SetDestination(_player.transform.position);
         ObjectSpinner.SpinObject(transform, _spriteTransform,
             _agent.nextPosition);
+        _agent.SetDestination(_player.transform.position);
     }
 
     private void LateUpdate()
@@ -42,6 +45,7 @@ public class Enemy : MonoBehaviour, IEntity
         if (_isDetected) return;
         if (IsPlayerWithinRadius() is false) return;
         if (IsInConeOfVision() is false) return;
+        if (IsPlayerInRay() is false) return;
         _isDetected = _isDetected is false;
     }
 
@@ -75,11 +79,12 @@ public class Enemy : MonoBehaviour, IEntity
             PlayerDirection());
 
     private bool IsPlayerWithinRadius() => GetPlayerDistance() < origin.distance;
+    public bool IsAlive() => _health > 0;
+
+    public bool IsPlayerInRay() => Physics2D.Raycast(transform.position, PlayerDirection(), origin.distance).collider.gameObject.layer.Equals(6);
 
     private float GetPlayerDistance() => Vector2.Distance(_player.transform.position, transform.position);
-
     private Vector2 PlayerDirection() => ObjectSpinner.DirectionVector(GetPositionVector2(), PlayerPosition());
-
     private Vector2 PlayerPosition() => _player.transform.position;
     private Vector2 GetPositionVector2() => transform.position;
 }
