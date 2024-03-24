@@ -34,8 +34,8 @@ namespace DefaultNamespace
         private void OnDisable()
         {
             shoot.Disable();
-            reload.Enable();
-            aim.Enable();
+            reload.Disable();
+            aim.Disable();
         }
 
         private void Start()

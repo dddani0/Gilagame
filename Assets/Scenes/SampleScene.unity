@@ -28379,8 +28379,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -2859690206624725348, guid: a0bd203ee879b6d4f971cc4779477126, type: 3}
+      propertyPath: bullet
+      value: 
+      objectReference: {fileID: 6565926282983055127, guid: 81fb5c0679e7ac34c92c09c436a375a0, type: 3}
+    - target: {fileID: -2859690206624725348, guid: a0bd203ee879b6d4f971cc4779477126, type: 3}
       propertyPath: playerLayer.m_Bits
       value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: -2859690206624725348, guid: a0bd203ee879b6d4f971cc4779477126, type: 3}
+      propertyPath: shootCooldownSeconds
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1822218345331286935, guid: a0bd203ee879b6d4f971cc4779477126, type: 3}
       propertyPath: m_LocalRotation.w

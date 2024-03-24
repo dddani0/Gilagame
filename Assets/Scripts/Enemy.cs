@@ -1,5 +1,6 @@
 ﻿using System;
 using DefaultNamespace;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -18,6 +19,9 @@ public class Enemy : MonoBehaviour, IEntity
     private bool _isDetected = false;
     private LayerMask _playerLayer = 6;
 
+    public float shootCooldownSeconds;
+    private Timer shootTimer;
+    public GameObject bullet;
 
     private void Start()
     {
@@ -28,7 +32,8 @@ public class Enemy : MonoBehaviour, IEntity
         _agent.speed = origin.speed;
         _health = origin.health;
         _spriteTransform = transform.GetChild(0);
-        print(_spriteTransform.gameObject);
+        print(_spriteTransform.gameObject); //EZT NE TÖRÖLD MÉG KI
+        shootTimer = new Timer(shootCooldownSeconds);
     }
 
     private void Update()
@@ -38,6 +43,7 @@ public class Enemy : MonoBehaviour, IEntity
         ObjectSpinner.SpinObject(transform, _spriteTransform,
             _agent.nextPosition);
         _agent.SetDestination(_player.transform.position);
+        ShootTowardsEnemy();
     }
 
     private void LateUpdate()
@@ -68,6 +74,25 @@ public class Enemy : MonoBehaviour, IEntity
         _isDetected = _isDetected is false;
     }
 
+    private void ShootTowardsEnemy()
+    {
+        if (shootTimer.IsCooldown())
+        {
+            shootTimer.DecreaseTimer(Time.deltaTime);
+            return;
+        }
+        if (IsPlayerInRay() is false) return; //raycast errort dob, ha nem talál semmilyen collidert.
+
+        var shot = Instantiate(bullet, GetPositionVector2() + PlayerDirection(), quaternion.identity);
+
+        shot.transform.localEulerAngles =
+            new Vector3(0, 0, Vector2.SignedAngle(ObjectSpinner.DirectionVector(
+                    GetPositionVector2(),
+                    GetPositionVector2() + Vector2.up),
+                PlayerDirection()));
+        shootTimer.ResetTimer();
+    }
+
     private bool IsInConeOfVision() =>
         PlayerEnemyAngle() is >= (float)-Entity.VisionConeDegree and <= (float)Entity.VisionConeDegree;
 
@@ -81,7 +106,8 @@ public class Enemy : MonoBehaviour, IEntity
     private bool IsPlayerWithinRadius() => GetPlayerDistance() < origin.distance;
     public bool IsAlive() => _health > 0;
 
-    public bool IsPlayerInRay() => Physics2D.Raycast(transform.position, PlayerDirection(), origin.distance).collider.gameObject.layer.Equals(6);
+    public bool IsPlayerInRay() => Physics2D.Raycast(transform.position, PlayerDirection(), origin.distance).collider
+        .gameObject.layer.Equals(6);
 
     private float GetPlayerDistance() => Vector2.Distance(_player.transform.position, transform.position);
     private Vector2 PlayerDirection() => ObjectSpinner.DirectionVector(GetPositionVector2(), PlayerPosition());
