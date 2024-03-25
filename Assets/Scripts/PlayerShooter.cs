@@ -1,8 +1,11 @@
 ﻿using System;
+using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using Object = System.Object;
 
 namespace DefaultNamespace
 {
@@ -31,8 +34,8 @@ namespace DefaultNamespace
         private void OnDisable()
         {
             shoot.Disable();
-            reload.Enable();
-            aim.Enable();
+            reload.Disable();
+            aim.Disable();
         }
 
         private void Start()
@@ -42,14 +45,13 @@ namespace DefaultNamespace
             _fireRate = new Timer(gunOrigin.fireRate);
             shoot.performed += Shoot;
             reload.performed += Reload;
+            Cursor.visible = false;
         }
 
         private void Update()
         {
             if (CanFireGun()) _fireRate.DecreaseTimer(Time.deltaTime);
             if (_fireRate.IsCooldown()) _fireRate.DecreaseTimer(Time.deltaTime);
-            if (IsMouseMoving()) //works but wonky. Will need to fix later.
-                ObjectSpinner.SpinObject(transform, cursor, GetMousePositionVector2());
         }
 
         private void Reload(InputAction.CallbackContext obj)
@@ -61,15 +63,30 @@ namespace DefaultNamespace
         {
             if (_ammunition <= 0) return;
             if (_fireRate.IsCooldown()) return;
-            Instantiate(bullet, cursor.position, cursor.rotation);
+            //Somehow instantiating with quaternion.euler deforms the rotation.
+            //Below is the post-rotation setting, which works.
+            //I suspect, that Quaternion.Euler rotates a bit and it alters the rotation.
+            var shot = Instantiate(bullet, transform.position, quaternion.identity);
+            shot.transform.localEulerAngles = new Vector3(0, 0, GetCrosshairRotation()); 
             _fireRate.ResetTimer();
             _ammunition--;
         }
 
+        public Vector2 GetPositionVector2() => transform.position;
+
         private bool CanFireGun() => _fireRate.IsCooldown() is false && _ammunition > 0;
-        private bool IsMouseMoving() => Mouse.current.delta.ReadValue() != Vector2.zero;
-        private Vector3 GetMousePosition() => Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
-        private Vector2 GetMousePositionVector2() => GetMousePosition();
+        public Vector3 GetMousePosition() => Camera.main!.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        public Vector2 GetMousePositionVector2() => GetMousePosition();
+
+        public float GetCrosshairRotation() =>
+            Vector2.SignedAngle(
+                ObjectSpinner.DirectionVector(
+                    GetPositionVector2(),
+                    GetPositionVector2() + Vector2.up),
+                ObjectSpinner.DirectionVector(
+                    GetPositionVector2(),
+                    GetMousePositionVector2()));
+
         public int GetAmmunition() => _ammunition;
     }
 }
