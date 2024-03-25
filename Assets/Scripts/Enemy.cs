@@ -51,7 +51,7 @@ public class Enemy : MonoBehaviour, IEntity
         if (_isDetected) return;
         if (IsPlayerWithinRadius() is false) return;
         if (IsInConeOfVision() is false) return;
-        if (IsPlayerInRay() is false) return;
+        if (IsPlayerInSight() is false) return;
         _isDetected = _isDetected is false;
     }
 
@@ -81,15 +81,16 @@ public class Enemy : MonoBehaviour, IEntity
             shootTimer.DecreaseTimer(Time.deltaTime);
             return;
         }
-        if (IsPlayerInRay() is false) return; //raycast errort dob, ha nem talál semmilyen collidert.
+
+        if (IsPlayerInSight() is false) return;
 
         var shot = Instantiate(bullet, GetPositionVector2() + PlayerDirection(), quaternion.identity);
-
         shot.transform.localEulerAngles =
             new Vector3(0, 0, Vector2.SignedAngle(ObjectSpinner.DirectionVector(
                     GetPositionVector2(),
                     GetPositionVector2() + Vector2.up),
                 PlayerDirection()));
+        
         shootTimer.ResetTimer();
     }
 
@@ -106,8 +107,9 @@ public class Enemy : MonoBehaviour, IEntity
     private bool IsPlayerWithinRadius() => GetPlayerDistance() < origin.distance;
     public bool IsAlive() => _health > 0;
 
-    public bool IsPlayerInRay() => Physics2D.Raycast(transform.position, PlayerDirection(), origin.distance).collider
-        .gameObject.layer.Equals(6);
+    public bool IsPlayerInSight() =>
+        Physics2D.Raycast(GetPositionVector2(), PlayerDirection(), origin.distance).collider is not null &&
+        Physics2D.Raycast(GetPositionVector2(), PlayerDirection(), origin.distance).collider.gameObject.layer.Equals(6);
 
     private float GetPlayerDistance() => Vector2.Distance(_player.transform.position, transform.position);
     private Vector2 PlayerDirection() => ObjectSpinner.DirectionVector(GetPositionVector2(), PlayerPosition());
