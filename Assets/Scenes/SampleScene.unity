@@ -28388,7 +28388,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -2859690206624725348, guid: a0bd203ee879b6d4f971cc4779477126, type: 3}
       propertyPath: shootCooldownSeconds
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 1822218345331286935, guid: a0bd203ee879b6d4f971cc4779477126, type: 3}
       propertyPath: m_LocalRotation.w

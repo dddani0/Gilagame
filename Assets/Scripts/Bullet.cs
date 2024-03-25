@@ -7,7 +7,6 @@ namespace DefaultNamespace
     {
         private float _speed = 15f * 100f;
         private Rigidbody2D _bulletRigidbody;
-        private int damage;
 
         private void Start()
         {
@@ -19,9 +18,7 @@ namespace DefaultNamespace
         {
             _bulletRigidbody.velocity = ((Vector2)transform.up) * (_speed * Time.deltaTime);
         }
-
-        public int GetDamage() => damage;
-
+        
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Player") is false) Destroy(gameObject);

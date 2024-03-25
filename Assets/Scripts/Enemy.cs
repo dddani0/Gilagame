@@ -7,24 +7,23 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour, IEntity
 {
     public Entity origin;
-
     //
     private int _health;
     private NavMeshAgent _agent;
     private GameObject _player;
-
     private Transform _spriteTransform;
     //
-
     private bool _isDetected = false;
     private LayerMask _playerLayer = 6;
-
     public float shootCooldownSeconds;
-    private Timer shootTimer;
+    private Timer _shootTimer;
     public GameObject bullet;
+
+    private Rigidbody2D _rigidbody2D;
 
     private void Start()
     {
+        _rigidbody2D = GetComponent<Rigidbody2D>();
         _agent = GetComponent<NavMeshAgent>();
         _player = GameObject.FindGameObjectWithTag("Player");
         _agent.updateRotation = false;
@@ -32,8 +31,8 @@ public class Enemy : MonoBehaviour, IEntity
         _agent.speed = origin.speed;
         _health = origin.health;
         _spriteTransform = transform.GetChild(0);
-        print(_spriteTransform.gameObject); //EZT NE TÖRÖLD MÉG KI
-        shootTimer = new Timer(shootCooldownSeconds);
+        print($"transform.GetChild(0): {_spriteTransform.gameObject}"); //EZT NE TÖRÖLD MÉG KI
+        _shootTimer = new Timer(shootCooldownSeconds);
     }
 
     private void Update()
@@ -42,7 +41,7 @@ public class Enemy : MonoBehaviour, IEntity
         if (_isDetected is false) return;
         ObjectSpinner.SpinObject(transform, _spriteTransform,
             _agent.nextPosition);
-        _agent.SetDestination(_player.transform.position);
+        _agent.SetDestination(PlayerPosition());
         ShootTowardsEnemy();
     }
 
@@ -58,7 +57,6 @@ public class Enemy : MonoBehaviour, IEntity
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Bullet")) return;
-        var bullet = other.GetComponent<Bullet>();
         Damage(1);
     }
 
@@ -70,15 +68,20 @@ public class Enemy : MonoBehaviour, IEntity
     public void Damage(int damage)
     {
         _health -= damage;
+        if (IsAlive() is false)
+        {
+            _agent.speed = 0;
+            enabled = false; 
+        }
         if (_isDetected) return;
         _isDetected = _isDetected is false;
     }
 
     private void ShootTowardsEnemy()
     {
-        if (shootTimer.IsCooldown())
+        if (_shootTimer.IsCooldown())
         {
-            shootTimer.DecreaseTimer(Time.deltaTime);
+            _shootTimer.DecreaseTimer(Time.deltaTime);
             return;
         }
 
@@ -90,8 +93,8 @@ public class Enemy : MonoBehaviour, IEntity
                     GetPositionVector2(),
                     GetPositionVector2() + Vector2.up),
                 PlayerDirection()));
-        
-        shootTimer.ResetTimer();
+
+        _shootTimer.ResetTimer();
     }
 
     private bool IsInConeOfVision() =>
