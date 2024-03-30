@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: 3b22a018011af4640b7f2232af8dd01a
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Neue Metana Mono Free Personal
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 75f50678731f772478d944e203e27225, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
