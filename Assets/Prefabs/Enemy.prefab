@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
+  m_Sprite: {fileID: 243173577, guid: ca87c5857fcd21c45ac0429edd99d5aa, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -133,6 +133,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   origin: {fileID: 11400000, guid: b66982f820fb4af4ea2fb24c1a8f3813, type: 2}
+  shootCooldownSeconds: 1.5
+  bullet: {fileID: 6565926282983055127, guid: 81fb5c0679e7ac34c92c09c436a375a0, type: 3}
 --- !u!195 &6118410993805171714
 NavMeshAgent:
   m_ObjectHideFlags: 0
