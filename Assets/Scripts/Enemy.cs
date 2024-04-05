@@ -1,5 +1,6 @@
 ﻿using System;
 using DefaultNamespace;
+using NavMeshPlus.Editors.Extensions;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
@@ -20,6 +21,7 @@ public class Enemy : MonoBehaviour, IEntity
     public GameObject bullet;
 
     private Rigidbody2D _rigidbody2D;
+    private Animator _animator;
 
     private void Start()
     {
@@ -31,6 +33,7 @@ public class Enemy : MonoBehaviour, IEntity
         _agent.speed = origin.speed;
         _health = origin.health;
         _spriteTransform = transform.GetChild(0);
+        _animator = transform.GetChild(0).gameObject.GetComponent<Animator>();
         print($"transform.GetChild(0): {_spriteTransform.gameObject}"); //EZT NE TÖRÖLD MÉG KI
         _shootTimer = new Timer(shootCooldownSeconds);
     }
@@ -38,9 +41,9 @@ public class Enemy : MonoBehaviour, IEntity
     private void Update()
     {
         if (IsAlive() is false) return;
+        _animator.SetFloat("horizontal", GetBlendtreePositions().x);
+        _animator.SetFloat("vertical", GetBlendtreePositions().y);
         if (_isDetected is false) return;
-        ObjectSpinner.SpinObject(transform, _spriteTransform,
-            _agent.nextPosition);
         _agent.SetDestination(PlayerPosition());
         ShootTowardsEnemy();
     }
@@ -108,7 +111,7 @@ public class Enemy : MonoBehaviour, IEntity
             PlayerDirection());
 
     private bool IsPlayerWithinRadius() => GetPlayerDistance() < origin.distance;
-    public bool IsAlive() => _health > 0;
+    private bool IsAlive() => _health > 0;
 
     public bool IsPlayerInSight() =>
         Physics2D.Raycast(GetPositionVector2(), PlayerDirection(), origin.distance).collider is not null &&
@@ -116,6 +119,9 @@ public class Enemy : MonoBehaviour, IEntity
 
     private float GetPlayerDistance() => Vector2.Distance(_player.transform.position, transform.position);
     private Vector2 PlayerDirection() => ObjectSpinner.DirectionVector(GetPositionVector2(), PlayerPosition());
+    private Vector2 AgentDirection() => ObjectSpinner.DirectionVector(GetPositionVector2(), AgentPosition());
     private Vector2 PlayerPosition() => _player.transform.position;
+    private Vector2 AgentPosition() => _agent.nextPosition;
     private Vector2 GetPositionVector2() => transform.position;
+    private Vector2 GetBlendtreePositions() => _isDetected is false ? Vector2.zero : PlayerDirection();
 }
