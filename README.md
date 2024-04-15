@@ -1,6 +1,4 @@
 ## Gilagame
-A project for my videogame development university class.
+A project for my 'videogame development' university class.
 
-You're a cowboy Gila who has a vendetta against a rival gang who robbed his town. With a revolver on your hip and a sharp stare you take them on.
-
-Game is to be completed by the end of this semester.
+As a sharpshooter outlaw, you're the only hope for Echo Wave Town to remove the bandits. Your only partner will be your instincts and the big iron on your hip.
