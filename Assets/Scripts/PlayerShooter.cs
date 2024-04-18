@@ -1,11 +1,7 @@
-﻿using System;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor;
+﻿using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
-using Object = System.Object;
 
 namespace DefaultNamespace
 {
