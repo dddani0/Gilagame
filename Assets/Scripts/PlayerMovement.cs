@@ -30,6 +30,17 @@ public class PlayerMovement : MonoBehaviour
         _playerPhysicsRigidbody = GetComponent<Rigidbody2D>();
         _animation = GetComponentInChildren<Animator>();
         cm = GameObject.Find("Canvas").GetComponent<CanvasManager>();
+
+        if (PlayerPrefs.HasKey("pos") is false) return;
+        if (SceneManager.GetActiveScene().name.Equals("EchowaveTown") is false) return;
+        //only set a new position, when the player actually enters the hub area.
+        print("exited");
+        var rawPosition = PlayerPrefs.GetString("pos");
+        transform.position = new Vector3(
+            float.Parse(rawPosition.Split("|")[0]),
+            float.Parse(rawPosition.Split("|")[1]),
+            float.Parse(rawPosition.Split("|")[2])
+        );
     }
 
     void Update()
@@ -49,9 +60,24 @@ public class PlayerMovement : MonoBehaviour
 
     public void ChangeActiveState() => _isActive = _isActive is false;
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D collidingObject)
     {
-        switch (other.gameObject.name.ToLower())
+        const float positionOffset = 5f;
+        if (IsTriggerEnter() is false) return;
+        if (IsFallacyTrigger())
+        {
+            ChangeActiveState();
+            return;
+        }
+
+        if (IsExitTrigger())
+        {
+            SceneManager.LoadScene(1);
+            return;
+        }
+
+        PlayerPrefs.SetString("pos", PositionSaveParser(transform.position));
+        switch (collidingObject.gameObject.name.ToLower())
         {
             case "saloontrigger":
                 SceneManager.LoadScene(2);
@@ -62,9 +88,17 @@ public class PlayerMovement : MonoBehaviour
             case "gunsmithtrigger":
                 SceneManager.LoadScene(3);
                 break;
-            case "billboardtrigger":
-                ChangeActiveState();
-                break;
         }
+
+        return;
+
+        bool IsTriggerEnter() => collidingObject.gameObject.name.ToLower().Contains("trigger");
+        string PositionSaveParser(Vector3 position) => $"{position.x}|{position.y - positionOffset}|{position.z}";
+
+        bool IsFallacyTrigger()
+            => collidingObject.gameObject.name.ToLower().Equals("billboardtrigger");
+
+        bool IsExitTrigger()
+            => collidingObject.gameObject.name.ToLower().Equals("exittrigger");
     }
 }
