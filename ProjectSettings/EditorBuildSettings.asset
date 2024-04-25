@@ -6,7 +6,19 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Scenes/Menu.unity
+    guid: 8bdfe6cc6ea96244fadf5d00b6c75055
+  - enabled: 1
+    path: Assets/Scenes/EchowaveTown.unity
+    guid: 350ac09885fe65444af82bc980213311
+  - enabled: 1
+    path: Assets/Scenes/Saloon.unity
+    guid: 80fcdb9f79c79494cb616dbd5c4e58f6
+  - enabled: 1
+    path: Assets/Scenes/Gunsmith.unity
+    guid: ea5b2c529292ec54d976d04912b4b129
+  - enabled: 1
+    path: Assets/Scenes/Sheriff.unity
+    guid: f346c1274561235459d8eb96167f55fe
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 8c090cc60b12830418fb5b29c83f898f, type: 2}

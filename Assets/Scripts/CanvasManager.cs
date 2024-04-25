@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class CanvasManager : MonoBehaviour
 {
@@ -10,8 +11,7 @@ public class CanvasManager : MonoBehaviour
     private Player _player;
 
     //
-    public TMPro.TextMeshProUGUI _ammunitionText;
-    public TMPro.TextMeshProUGUI _healthText;
+    public TMPro.TextMeshProUGUI ammunitionText;
 
     void Start()
     {
@@ -19,10 +19,8 @@ public class CanvasManager : MonoBehaviour
         _player = GameObject.Find("Player").GetComponent<Player>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        _ammunitionText.text = $"Ammunition: {_playerShooter.GetAmmunition()}";
-        _healthText.text = $"Health: {_player.GetHealth()}";
+        ammunitionText.text = _playerShooter.GetAmmunition().ToString();
     }
 }
