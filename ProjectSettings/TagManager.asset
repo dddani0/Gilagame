@@ -7,6 +7,8 @@ TagManager:
   - DisplayWeapon
   - Bullet
   - Crosshair
+  - CanvasManager
+  - IngameManager
   layers:
   - Default
   - TransparentFX

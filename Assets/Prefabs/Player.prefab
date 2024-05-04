@@ -46,7 +46,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6700172748614981400}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09876825f7d842fcb0d321ab14c79a5b, type: 3}
+  m_Script: {fileID: 11500000, guid: d934b3e103dd55e4c8a4536c951e2c37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gunOrigin: {fileID: 11400000, guid: a88291c5dde994446ad5f86325b992e9, type: 2}
@@ -54,87 +54,31 @@ MonoBehaviour:
     m_Name: Shoot
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 91318dc5-b633-434d-b850-7cec92d4c1a7
+    m_Id: 8c13db26-bfee-42f7-8ac0-5f3753277227
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 6e62570c-2763-4f4f-99a0-8b0f9ba58d3d
-      m_Path: <Mouse>/leftButton
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Shoot
-      m_Flags: 0
+    m_SingletonActionBindings: []
     m_Flags: 0
   reload:
     m_Name: Reload
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 36bd7762-d714-4462-8ef3-f690735e281a
+    m_Id: ebf7f635-52cd-4b25-864f-b9e297f0bf8e
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 
-      m_Id: 5fd6f9c9-a794-412d-bcd0-e27c8ccaebd3
-      m_Path: <Keyboard>/r
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Reload
-      m_Flags: 0
+    m_SingletonActionBindings: []
     m_Flags: 0
   aim:
     m_Name: Aim
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 3cd38894-d221-4ab0-ba70-b8dfe0ee07af
+    m_Id: 026d52ff-2d72-4d64-94cb-a94dc4c0afbc
     m_Processors: 
     m_Interactions: 
-    m_SingletonActionBindings:
-    - m_Name: 2D Vector
-      m_Id: 3aff4a9c-e260-4f06-b32e-be621d7603b1
-      m_Path: 2DVector
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Aim
-      m_Flags: 4
-    - m_Name: up
-      m_Id: d536be96-cd0e-419f-b4a8-fd4408b225ad
-      m_Path: <Mouse>/delta/up
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Aim
-      m_Flags: 8
-    - m_Name: down
-      m_Id: c9d64b24-c14e-45ad-8d70-942bec29de3c
-      m_Path: <Mouse>/delta/down
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Aim
-      m_Flags: 8
-    - m_Name: left
-      m_Id: d8bf8ff9-cb0f-4f13-88fc-22d056d769c5
-      m_Path: <Mouse>/delta/left
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Aim
-      m_Flags: 8
-    - m_Name: right
-      m_Id: 007776ce-b5ff-4bee-923d-3fa109e09872
-      m_Path: <Mouse>/delta/right
-      m_Interactions: 
-      m_Processors: 
-      m_Groups: 
-      m_Action: Aim
-      m_Flags: 8
+    m_SingletonActionBindings: []
     m_Flags: 0
   cursor: {fileID: 0}
-  bullet: {fileID: 6565926282983055127, guid: 81fb5c0679e7ac34c92c09c436a375a0, type: 3}
+  bullet: {fileID: 0}
 --- !u!114 &6700172748614981412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,7 +88,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6700172748614981400}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0dfc2881a3af445cb8da7fdde1c3dd12, type: 3}
+  m_Script: {fileID: 11500000, guid: c8a8bee4f5b34d843b512d52996bb997, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &6700172748614981414
@@ -335,7 +279,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 2, y: 3.5017092}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
