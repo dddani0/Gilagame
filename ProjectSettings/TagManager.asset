@@ -7,6 +7,10 @@ TagManager:
   - DisplayWeapon
   - Bullet
   - Crosshair
+  - CanvasManager
+  - IngameManager
+  - SpawnPositions
+  - Corpse
   layers:
   - Default
   - TransparentFX

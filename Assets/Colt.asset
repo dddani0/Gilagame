@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4426f83f5ce24d1f9ad9f08db98a915a, type: 3}
   m_Name: Colt
   m_EditorClassIdentifier: 
-  name: Colt M1873
+  name: Colt
   ammunition: 6
   damage: 1
   fireRate: 1

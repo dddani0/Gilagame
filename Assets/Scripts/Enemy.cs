@@ -74,6 +74,7 @@ public class Enemy : MonoBehaviour, IEntity
         if (IsAlive() is false)
         {
             _agent.speed = 0;
+            gameObject.tag = "Corpse";
             enabled = false; 
         }
         if (_isDetected) return;
