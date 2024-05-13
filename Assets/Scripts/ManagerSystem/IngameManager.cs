@@ -1,5 +1,5 @@
-﻿using System;
-using BountySystem;
+﻿using BountySystem;
+using DefaultNamespace;
 using UnityEngine;
 
 namespace ManagerSystem
@@ -30,20 +30,34 @@ namespace ManagerSystem
             "Treason", "Affiliated with the 'Yellow-hats'", "Manslaughter", "loitering", "Murder", "Attempted murder"
         };
 
+        public Player player;
+
+        public Enemy[] enemies;
+        private Transform[] _spawns;
         private CanvasManager _canvasManager;
+        private Bounty _currentBounty;
         public bool isBountyInProgress = false;
 
         private void Start()
         {
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
             _canvasManager = GameObject.Find("Canvas").GetComponent<CanvasManager>();
+            _spawns = GameObject.Find("SpawnPositions").GetComponentsInChildren<Transform>();
         }
 
         public void GetNewBounty()
         {
             if (isBountyInProgress) return;
             var bounty = new Bounty(GetRandomName(), GetRandomCrime(), GetRandomBountyAmount());
-            isBountyInProgress = true;
+            _currentBounty = bounty;
             _canvasManager.ShowBounty(bounty);
+        }
+
+        public void CompleteBounty()
+        {
+            player.IncrementMoney(_currentBounty.Amount);
+            AddMoney(_currentBounty.Amount);
+            ChangeBountyStatus();
         }
 
         public void AddMoney(int amount)
@@ -52,7 +66,17 @@ namespace ManagerSystem
         public void SubtractMoney(int amount)
             => PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") - amount);
 
-        public void ResetBountyCoolision() => isBountyInProgress = isBountyInProgress is false;
+        public void ChangeBountyStatus() => isBountyInProgress = isBountyInProgress is false;
+
+        public void ChangeCursorVisibility() => Cursor.visible = Cursor.visible is false;
+
+        public void SpawnEnemy()
+        {
+            print("Enemy spawned.");
+            var randomEnemy = enemies[(int)RandomNumberGenerator.Instance.Generate(0, enemies.Length - 1)].gameObject;
+            var randomPosition = _spawns[(int)RandomNumberGenerator.Instance.Generate(1, _spawns.Length)].position;
+            Instantiate(randomEnemy, randomPosition, Quaternion.identity);
+        }
 
         private string GetRandomName()
         {

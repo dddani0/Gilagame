@@ -13,6 +13,7 @@ namespace ManagerSystem
         //
         public TMPro.TextMeshProUGUI ammunitionText;
         public TMPro.TextMeshProUGUI moneyText;
+        public TMPro.TextMeshProUGUI weaponNameText;
         //bounty
         public GameObject bountyElement;
         public TMPro.TextMeshProUGUI name;
@@ -28,7 +29,8 @@ namespace ManagerSystem
         void Update()
         {
             ammunitionText.text = _playerShooter.GetAmmunition().ToString();
-            moneyText.text = _player.Money.ToString();
+            moneyText.text = $"{_player.Money.ToString()}$";
+            weaponNameText.text = _playerShooter.gunOrigin.name;
         }
 
         public void ShowBounty(Bounty bounty)

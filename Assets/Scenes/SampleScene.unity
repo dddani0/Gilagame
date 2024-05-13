@@ -12782,6 +12782,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammunitionText: {fileID: 1129136428}
+  moneyText: {fileID: 0}
+  weaponNameText: {fileID: 0}
+  bountyElement: {fileID: 0}
+  name: {fileID: 0}
+  crime: {fileID: 0}
+  bountyAmount: {fileID: 0}
 --- !u!1 &1129136425
 GameObject:
   m_ObjectHideFlags: 0

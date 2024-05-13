@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using ManagerSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -67,13 +68,24 @@ namespace PlayerSystem
         private void OnTriggerEnter2D(Collider2D collidingObject)
         {
             const float positionOffset = 5f;
+            print(collidingObject);
+            if (collidingObject.CompareTag("Corpse"))
+            {
+                
+                var corpse = collidingObject.gameObject;
+                Destroy(corpse);
+                _ingameManager.CompleteBounty();
+            }
+            if (_ingameManager.isBountyInProgress) return;
             if (IsTriggerEnter() is false) return;
             if (IsFallacyTrigger())
             {
                 ChangeActiveState();
                 _ingameManager.GetNewBounty();
+                _ingameManager.ChangeCursorVisibility();
                 return;
             }
+            
 
             if (IsExitTrigger())
             {

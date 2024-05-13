@@ -1,4 +1,5 @@
-﻿using Unity.Mathematics;
+﻿using ManagerSystem;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -11,6 +12,8 @@ namespace DefaultNamespace
         private string _gunName;
         private int _ammunition;
 
+        private IngameManager _ingameManager;
+        
         private Timer _fireRate;
 
         //
@@ -41,7 +44,8 @@ namespace DefaultNamespace
             _fireRate = new Timer(gunOrigin.fireRate);
             shoot.performed += Shoot;
             reload.performed += Reload;
-            Cursor.visible = false;
+            _ingameManager = GameObject.Find("IngameManager").GetComponent<IngameManager>();
+            _ingameManager.ChangeCursorVisibility();
         }
 
         private void Update()
