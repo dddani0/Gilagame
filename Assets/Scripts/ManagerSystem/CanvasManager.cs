@@ -13,12 +13,18 @@ namespace ManagerSystem
         //
         public TMPro.TextMeshProUGUI ammunitionText;
         public TMPro.TextMeshProUGUI moneyText;
+
         public TMPro.TextMeshProUGUI weaponNameText;
+
         //bounty
         public GameObject bountyElement;
         public TMPro.TextMeshProUGUI name;
         public TMPro.TextMeshProUGUI crime;
-        public TMPro.TextMeshProUGUI bountyAmount; 
+
+        public TMPro.TextMeshProUGUI bountyAmount;
+
+        // shop
+        public GameObject shopElement;
 
         void Start()
         {
@@ -31,6 +37,16 @@ namespace ManagerSystem
             ammunitionText.text = _playerShooter.GetAmmunition().ToString();
             moneyText.text = $"{_player.Money.ToString()}$";
             weaponNameText.text = _playerShooter.gunOrigin.name;
+        }
+
+        public void ShowShop()
+        {
+            shopElement.SetActive(true);
+        }
+
+        public void DisableShop()
+        {
+            shopElement.SetActive(false);
         }
 
         public void ShowBounty(Bounty bounty)

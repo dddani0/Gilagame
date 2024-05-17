@@ -30,6 +30,7 @@ namespace DefaultNamespace
         public void Damage(int damage) => _health -= damage;
 
         public void IncrementMoney(int value) => Money += value;
+        public void DecrementMoney(int value) => Money -= value;
 
 
         // functionality

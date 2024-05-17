@@ -1276,7 +1276,19 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 50
+          m_IntArgument: 25
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1515490224}
+        m_TargetAssemblyTypeName: ButtonManager, Assembly-CSharp
+        m_MethodName: ResetPlayPosition
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1305,6 +1317,63 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5e3531c470e475f9dbca3e7f7033e55, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &1591848616
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 6932425199703027496, guid: 92f74683c2234a24ea583b91f700409e, type: 3}
+      propertyPath: m_Name
+      value: TagManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 6984624506423447645, guid: 92f74683c2234a24ea583b91f700409e, type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 6984624506423447645, guid: 92f74683c2234a24ea583b91f700409e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 724.3687
+      objectReference: {fileID: 0}
+    - target: {fileID: 6984624506423447645, guid: 92f74683c2234a24ea583b91f700409e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 399.20282
+      objectReference: {fileID: 0}
+    - target: {fileID: 6984624506423447645, guid: 92f74683c2234a24ea583b91f700409e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.0454426
+      objectReference: {fileID: 0}
+    - target: {fileID: 6984624506423447645, guid: 92f74683c2234a24ea583b91f700409e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6984624506423447645, guid: 92f74683c2234a24ea583b91f700409e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6984624506423447645, guid: 92f74683c2234a24ea583b91f700409e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6984624506423447645, guid: 92f74683c2234a24ea583b91f700409e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6984624506423447645, guid: 92f74683c2234a24ea583b91f700409e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6984624506423447645, guid: 92f74683c2234a24ea583b91f700409e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6984624506423447645, guid: 92f74683c2234a24ea583b91f700409e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 92f74683c2234a24ea583b91f700409e, type: 3}
 --- !u!1 &2042182251
 GameObject:
   m_ObjectHideFlags: 0

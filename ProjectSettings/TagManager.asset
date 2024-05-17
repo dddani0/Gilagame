@@ -11,6 +11,8 @@ TagManager:
   - IngameManager
   - SpawnPositions
   - Corpse
+  - ShopManager
+  - ShopItem
   layers:
   - Default
   - TransparentFX
