@@ -117,16 +117,19 @@ public class ShopKeeper : MonoBehaviour
                 new Vector3(textFrameRect.position.x, itemFrameRect.position.y - 80f); //offset (temp: hard-coded value)
             var itemPriceRect = itemPrice.AddComponent<RectTransform>();
             itemPriceRect.position =
-                new Vector3(itemPriceRect.position.x,
-                    textFrameRect.position.y - (textFrameRect.rect.height + 30f)); //ezt mocskos mód utálom csinálni
+                new Vector3(itemPriceRect.position.x, -textFrameRect.rect.height - 30f);
             var itemPriceText = itemPrice.AddComponent<TMPro.TextMeshProUGUI>();
             itemPriceText.text = shopItem.Available ? ($"{shopItem.GetItem.price.ToString()}$") : ("SOLD!");
+            itemPriceText.color = shopItem.Available
+                ? _player.Money < shopItem.GetItem.price ? Color.gray : Color.green
+                : Color.red;
             itemPriceText.alignment = TextAlignmentOptions.Center;
-            Debug.Log(PlayerPrefs.GetString(shopItem.GetItem.name).Split(";")[1]);
         }
+
         return;
 
-        bool IsItemAvailable(CatalogItem shopItem) => PlayerPrefs.GetString(shopItem.GetItem.name).Split(";")[1].ToLower().ToString()
+        bool IsItemAvailable(CatalogItem shopItem) => PlayerPrefs.GetString(shopItem.GetItem.name).Split(";")[1]
+            .ToLower().ToString()
             .Equals("true");
     }
 
@@ -136,11 +139,12 @@ public class ShopKeeper : MonoBehaviour
         var shopItems = GameObject.FindGameObjectsWithTag("ShopItem");
         foreach (var item in shopItems)
         {
-            if (item.name.ToLower().Equals($"{selectedItem.name.ToLower()}item"))
-            {
-                //get children
-                //change price text to sold
-            }
+            if (!item.name.ToLower().Equals($"{selectedItem.name.ToLower()}item")) continue;
+            item.GetComponent<Button>().enabled = false;
+            var textChild = item.transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+            textChild.text = "SOLD!";
+            textChild.color = Color.red;
+            return;
         }
     }
 
@@ -153,6 +157,13 @@ public class ShopKeeper : MonoBehaviour
         PlayerPrefs.SetString(item.GetItem.name, $"{item.GetItem.name};{item.Available}");
         UpdateItem(item.GetItem);
     }
+
+    private void updateCatalog()
+    {
+        
+    }
+    
+    
 
     private void OnTriggerEnter2D(Collider2D other)
     {

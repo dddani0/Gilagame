@@ -5,9 +5,12 @@ using ManagerSystem;
 using PlayerSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Windows;
 
 public class ButtonManager : MonoBehaviour
 {
+    public Item[] items; //this is the easiest way to reset item availability (not the best solution)
+
     public delegate void SelectItemDelegate(Item delegatedItem);
 
     public static SelectItemDelegate Select;
@@ -17,28 +20,17 @@ public class ButtonManager : MonoBehaviour
     public static void ResetMoney(int defaultValue) => PlayerPrefs.SetInt("Money", defaultValue);
     public static void OpenRepository() => Application.OpenURL("https://github.com/marloss/Gilagame");
 
-    public static void ResetSave(int moneyDefaultValue, Item[] items)
+    public void ResetSave(int moneyDefaultValue)
     {
-        //Unity is being a fucking didly little shit and doesnt allow these types of functions to work with inspector value assigning.
-        //we have to do it function to function
-        // :(
         ResetMoney(moneyDefaultValue);
-        PlayerPrefs.SetString("pos", "-118|11|0");
+        ResetPlayerPosition();
         foreach (var item in items)
         {
             PlayerPrefs.SetString(item.name, $"{item.name};true");
         }
     }
 
-    public void ResetPlayPosition() => PlayerPrefs.SetString("pos", "-118|11|0");
-
-    public void ResetItems(Item items)
-    {
-        // foreach (var item in items)
-        // {
-        //     PlayerPrefs.SetString(item.name, $"{item.name};true");
-        // }
-    }
+    public void ResetPlayerPosition() => PlayerPrefs.SetString("pos", "-118|11|0");
 
     public static void AcceptBounty(GameObject bountyUI)
     {
