@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DefaultNamespace;
 using ManagerSystem;
 using TMPro;
@@ -13,13 +14,14 @@ internal class CatalogItem
     private Item _item;
     private bool _available;
 
-    public CatalogItem(Item item)
+    public CatalogItem(Item item, bool availability)
     {
         _item = item;
-        _available = true;
+        _available = availability;
     }
 
-    public void ChangeAvailability() => _available = !_available;
+    public void ChangeAvailability() => _available = _available is false;
+
     public Item GetItem => _item;
 
     public bool Available => _available;
@@ -55,12 +57,17 @@ public class ShopKeeper : MonoBehaviour
         _items = new List<CatalogItem>();
         foreach (var item in Arsenal)
         {
-            _items.Add(new CatalogItem(item));
+            _items.Add(new CatalogItem(item, IsItemAvailable(item)));
         }
     }
 
     private void DisplayItems()
     {
+        foreach (var i in _items.Where(i => i.Available != IsItemAvailable(i.GetItem)))
+        {
+            i.ChangeAvailability();
+        }
+
         if (_canvasManager.shopElement.transform.childCount > 3) //Background element and button is ignored.
         {
             for (int i = _canvasManager.shopElement.transform.childCount - 1; i > 1; i--)
@@ -99,7 +106,6 @@ public class ShopKeeper : MonoBehaviour
                 }
             };
             canvasObjectParent.AddComponent<RectTransform>();
-            if (IsItemAvailable(shopItem) is false) shopItem.ChangeAvailability();
             if (shopItem.Available)
             {
                 var button = canvasObjectParent.AddComponent<Button>();
@@ -128,7 +134,7 @@ public class ShopKeeper : MonoBehaviour
 
         return;
 
-        bool IsItemAvailable(CatalogItem shopItem) => PlayerPrefs.GetString(shopItem.GetItem.name).Split(";")[1]
+        bool IsItemAvailable(Item item) => PlayerPrefs.GetString(item.name).Split(";")[1]
             .ToLower().ToString()
             .Equals("true");
     }
@@ -158,12 +164,10 @@ public class ShopKeeper : MonoBehaviour
         UpdateItem(item.GetItem);
     }
 
-    private void updateCatalog()
-    {
-        
-    }
-    
-    
+    private bool IsItemAvailable(Item item) => PlayerPrefs.GetString(item.name).Split(";")[1]
+        .ToLower().ToString()
+        .Equals("true");
+
 
     private void OnTriggerEnter2D(Collider2D other)
     {
