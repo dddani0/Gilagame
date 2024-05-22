@@ -8,7 +8,7 @@ namespace DefaultNamespace
 {
     public class PlayerShooter : MonoBehaviour
     {
-        [FormerlySerializedAs("originObject")] public Gun gunOrigin;
+        public Gun gunOrigin;
         private string _gunName;
         private int _ammunition;
 
@@ -20,7 +20,6 @@ namespace DefaultNamespace
         public InputAction shoot;
         public InputAction reload;
         public InputAction aim;
-        public Transform cursor;
         public GameObject bullet;
 
         private void OnEnable()
@@ -50,6 +49,7 @@ namespace DefaultNamespace
 
         private void Update()
         {
+            if (_ingameManager.IsActive is false) return;
             if (CanFireGun()) _fireRate.DecreaseTimer(Time.deltaTime);
             if (_fireRate.IsCooldown()) _fireRate.DecreaseTimer(Time.deltaTime);
         }
@@ -61,6 +61,7 @@ namespace DefaultNamespace
 
         private void Shoot(InputAction.CallbackContext obj)
         {
+            if (_ingameManager.IsActive is false) return;
             if (_ammunition <= 0) return;
             if (_fireRate.IsCooldown()) return;
             //Somehow instantiating with quaternion.euler deforms the rotation.
@@ -73,11 +74,9 @@ namespace DefaultNamespace
         }
 
         public Vector2 GetPositionVector2() => transform.position;
-
         private bool CanFireGun() => _fireRate.IsCooldown() is false && _ammunition > 0;
         public Vector3 GetMousePosition() => Camera.main!.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         public Vector2 GetMousePositionVector2() => GetMousePosition();
-
         public float GetCrosshairRotation() =>
             Vector2.SignedAngle(
                 ObjectSpinner.DirectionVector(

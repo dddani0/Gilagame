@@ -1,6 +1,7 @@
 ﻿using BountySystem;
 using DefaultNamespace;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace ManagerSystem
 {
@@ -37,12 +38,22 @@ namespace ManagerSystem
         private CanvasManager _canvasManager;
         private Bounty _currentBounty;
         public bool isBountyInProgress = false;
+        private Crosshair _crosshair;
+        private bool _isActive = true;
 
         private void Start()
         {
-            player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+            player = GameObject.FindGameObjectWithTag(TagManager.Instance.PlayerTag).GetComponent<Player>();
             _canvasManager = GameObject.Find("Canvas").GetComponent<CanvasManager>();
-            _spawns = GameObject.Find("SpawnPositions").GetComponentsInChildren<Transform>();
+            _crosshair = GameObject.Find(TagManager.Instance.CrosshairTag).GetComponent<Crosshair>();
+            if (GameObject.Find("SpawnPositions") != null)
+            {
+                if ((GameObject.Find("SpawnPositions").GetComponentsInChildren<Transform>()) != null)
+                {
+                    _spawns = GameObject.Find("SpawnPositions").GetComponentsInChildren<Transform>();
+                }
+            }
+            _crosshair.IsActive = SceneManager.GetActiveScene().name.Equals("EchoWaveTown");
         }
 
         public void GetNewBounty()
@@ -70,9 +81,10 @@ namespace ManagerSystem
 
         public void ChangeCursorVisibility() => Cursor.visible = Cursor.visible is false;
 
+        public void ChangePlayerActiveState() => _isActive = _isActive is false;
+
         public void SpawnEnemy()
         {
-            print("Enemy spawned.");
             var randomEnemy = enemies[(int)RandomNumberGenerator.Instance.Generate(0, enemies.Length - 1)].gameObject;
             var randomPosition = _spawns[(int)RandomNumberGenerator.Instance.Generate(1, _spawns.Length)].position;
             Instantiate(randomEnemy, randomPosition, Quaternion.identity);
@@ -88,5 +100,6 @@ namespace ManagerSystem
         private string GetRandomCrime() => _crime[(int)RandomNumberGenerator.Instance.Generate(0, _crime.Length)];
 
         private int GetRandomBountyAmount() => (int)RandomNumberGenerator.Instance.Generate(50, 100);
+        public bool IsActive => _isActive;
     }
 }

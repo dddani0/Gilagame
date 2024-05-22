@@ -1,4 +1,5 @@
 using System.Security.Cryptography;
+using DefaultNamespace;
 using ManagerSystem;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -9,12 +10,11 @@ namespace PlayerSystem
 {
     public class PlayerMovement : MonoBehaviour
     {
-        [FormerlySerializedAs("playerMove")] public InputAction move;
+        public InputAction move;
         private Vector2 _input;
         public float movementSpeed;
         private Rigidbody2D _playerPhysicsRigidbody;
         private Animator _animation;
-        private bool _isActive = true;
         private IngameManager _ingameManager;
 
         private void OnEnable()
@@ -31,9 +31,8 @@ namespace PlayerSystem
         {
             _playerPhysicsRigidbody = GetComponent<Rigidbody2D>();
             _animation = GetComponentInChildren<Animator>();
-            _ingameManager = GameObject.Find("IngameManager").GetComponent<IngameManager>();
-
-            if (PlayerPrefs.HasKey("pos") is false) return;
+            _ingameManager = GameObject.Find(TagManager.Instance.IngameManagerTag).GetComponent<IngameManager>();
+            
             if (SceneManager.GetActiveScene().name.Equals("EchowaveTown") is false) return;
             //only set a new position, when the player actually enters the hub area.
             var rawPosition = PlayerPrefs.GetString("pos");
@@ -46,7 +45,11 @@ namespace PlayerSystem
 
         void Update()
         {
-            if (_isActive is false) return;
+            if (_ingameManager.IsActive is false)
+            {
+                _playerPhysicsRigidbody.velocity = Vector2.zero;
+                return;
+            }
             FetchInput();
             _playerPhysicsRigidbody.velocity = _input * (movementSpeed * (1 / Time.deltaTime) * Time.deltaTime);
             _animation.SetFloat("horizontal", _input.x);
@@ -59,17 +62,10 @@ namespace PlayerSystem
             _input = move.ReadValue<Vector2>();
         }
 
-        public void ChangeActiveState()
-        {
-            _isActive = _isActive is false;
-            _playerPhysicsRigidbody.velocity = Vector2.zero;
-        }
-
         private void OnTriggerEnter2D(Collider2D collidingObject)
         {
             const float positionOffset = 5f;
-            print(collidingObject);
-            if (collidingObject.CompareTag("Corpse"))
+            if (collidingObject.CompareTag(TagManager.Instance.CorpseTag))
             {
                 
                 var corpse = collidingObject.gameObject;
@@ -80,7 +76,7 @@ namespace PlayerSystem
             if (IsTriggerEnter() is false) return;
             if (IsFallacyTrigger())
             {
-                ChangeActiveState();
+                _ingameManager.ChangePlayerActiveState();
                 _ingameManager.GetNewBounty();
                 _ingameManager.ChangeCursorVisibility();
                 return;

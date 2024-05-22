@@ -1,6 +1,4 @@
-﻿using System;
-using DefaultNamespace;
-using NavMeshPlus.Editors.Extensions;
+﻿using DefaultNamespace;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
@@ -27,7 +25,7 @@ public class Enemy : MonoBehaviour, IEntity
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _agent = GetComponent<NavMeshAgent>();
-        _player = GameObject.FindGameObjectWithTag("Player");
+        _player = GameObject.FindGameObjectWithTag(TagManager.Instance.PlayerTag);
         _agent.updateRotation = false;
         _agent.updateUpAxis = false;
         _agent.speed = origin.speed;
