@@ -5,7 +5,7 @@ namespace DefaultNamespace
 {
     public class Player : MonoBehaviour, IEntity
     {
-        private float _health = 3;
+        private int _health = 3;
         public int Money { get; private set; }
 
         public delegate void PlayerEvent();
@@ -25,7 +25,7 @@ namespace DefaultNamespace
 
         //IENTITY
         public void Heal(int addition) => _health += addition;
-
+        public int GetMaxHealth => 3;
 
         public void Damage(int damage) => _health -= damage;
 
@@ -34,7 +34,7 @@ namespace DefaultNamespace
 
 
         // functionality
-        public float GetHealth() => _health;
+        public int GetHealth() => _health;
 
         public bool IsAlive() => GetHealth() > 0;
         //

@@ -134,9 +134,7 @@ public class ShopKeeper : MonoBehaviour
 
         return;
 
-        bool IsItemAvailable(Item item) => PlayerPrefs.GetString(item.name).Split(";")[1]
-            .ToLower().ToString()
-            .Equals("true");
+        bool IsItemAvailable(Item item) => PlayerPrefs.GetString(item.name).Split(";")[1].ToLower().Equals("true");
     }
 
     private void UpdateItem(Item selectedItem)
@@ -154,14 +152,26 @@ public class ShopKeeper : MonoBehaviour
         }
     }
 
-    void BuyItem(CatalogItem item)
+    private void BuyItem(CatalogItem item)
     {
         if (item.Available is false) return;
+        if (_player.Money < item.GetItem.price) return;
         item.ChangeAvailability();
         _player.DecrementMoney(item.GetItem.price);
         PlayerPrefs.SetInt("Money", _player.Money);
         PlayerPrefs.SetString(item.GetItem.name, $"{item.GetItem.name};{item.Available}");
         UpdateItem(item.GetItem);
+        switch (item.GetItem.type)
+        {
+            case ItemType.Consumeable:
+                _player.Heal(_player.GetMaxHealth - _player.GetHealth());
+                break;
+            case ItemType.Weapon:
+                //add to player inventory.
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
     }
 
     private bool IsItemAvailable(Item item) => PlayerPrefs.GetString(item.name).Split(";")[1]
