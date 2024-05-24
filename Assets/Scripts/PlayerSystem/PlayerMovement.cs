@@ -32,10 +32,10 @@ namespace PlayerSystem
             _playerPhysicsRigidbody = GetComponent<Rigidbody2D>();
             _animation = GetComponentInChildren<Animator>();
             _ingameManager = GameObject.Find(TagManager.Instance.IngameManagerTag).GetComponent<IngameManager>();
-            
+
             if (SceneManager.GetActiveScene().name.Equals("EchowaveTown") is false) return;
             //only set a new position, when the player actually enters the hub area.
-            var rawPosition = PlayerPrefs.GetString("pos");
+            var rawPosition = PlayerPrefs.GetString(TagManager.Instance.PlayerPositionSaveTag);
             transform.position = new Vector3(
                 float.Parse(rawPosition.Split("|")[0]),
                 float.Parse(rawPosition.Split("|")[1]),
@@ -50,6 +50,7 @@ namespace PlayerSystem
                 _playerPhysicsRigidbody.velocity = Vector2.zero;
                 return;
             }
+
             FetchInput();
             _playerPhysicsRigidbody.velocity = _input * (movementSpeed * (1 / Time.deltaTime) * Time.deltaTime);
             _animation.SetFloat("horizontal", _input.x);
@@ -67,11 +68,11 @@ namespace PlayerSystem
             const float positionOffset = 5f;
             if (collidingObject.CompareTag(TagManager.Instance.CorpseTag))
             {
-                
                 var corpse = collidingObject.gameObject;
                 Destroy(corpse);
                 _ingameManager.CompleteBounty();
             }
+
             if (_ingameManager.isBountyInProgress) return;
             if (IsTriggerEnter() is false) return;
             if (IsFallacyTrigger())
@@ -81,7 +82,7 @@ namespace PlayerSystem
                 _ingameManager.ChangeCursorVisibility();
                 return;
             }
-            
+
 
             if (IsExitTrigger())
             {
