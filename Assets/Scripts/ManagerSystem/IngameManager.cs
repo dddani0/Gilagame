@@ -53,7 +53,7 @@ namespace ManagerSystem
                     _spawns = GameObject.Find("SpawnPositions").GetComponentsInChildren<Transform>();
                 }
             }
-            _crosshair.IsActive = SceneManager.GetActiveScene().name.Equals("EchoWaveTown");
+            _crosshair.IsActive = SceneManager.GetActiveScene().name.ToLower().Equals("echowavetown");
         }
 
         public void GetNewBounty()

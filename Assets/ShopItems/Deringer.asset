@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Rimfire Deringer
   price: 250
-  available: 0
   sprite: {fileID: 0}
+  type: 1
+  damage: 2
+  ammunition: 4
+  fireRate: 1

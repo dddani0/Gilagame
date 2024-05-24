@@ -8,7 +8,7 @@ namespace DefaultNamespace
     {
         private PlayerShooter _playerShooter;
         private GameObject _weaponDisplay;
-        private bool _isActive;
+        private bool _isActive = true;
 
         private void Start()
         {
@@ -20,7 +20,7 @@ namespace DefaultNamespace
         {
             if (_isActive is false)
             {
-                transform.LookAt(-_weaponDisplay.transform.right);
+                transform.LookAt(new Vector3(-1,-1));
                 return;
             }
             transform.position = _playerShooter.GetMousePositionVector2();

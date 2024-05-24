@@ -430,6 +430,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items: []
+  defaultGun: {fileID: 0}
 --- !u!1 &702102997
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,6 +709,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items: []
+  defaultGun: {fileID: 0}
 --- !u!1 &1268103202
 GameObject:
   m_ObjectHideFlags: 0
@@ -1129,6 +1131,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   items: []
+  defaultGun: {fileID: 0}
 --- !u!1 &1515490218
 GameObject:
   m_ObjectHideFlags: 0
@@ -1279,7 +1282,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 25
+          m_IntArgument: 500
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1312,6 +1315,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6e958d81790553643bae8982fcf70854, type: 2}
   - {fileID: 11400000, guid: 9e384ba601935a443b2f5b60f2196a1d, type: 2}
   - {fileID: 11400000, guid: 24c600e37cbd7a2419fd4e694b6d5fd9, type: 2}
+  defaultGun: {fileID: 11400000, guid: a88291c5dde994446ad5f86325b992e9, type: 2}
 --- !u!1001 &1591848616
 PrefabInstance:
   m_ObjectHideFlags: 0

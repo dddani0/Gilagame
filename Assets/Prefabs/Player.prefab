@@ -134,7 +134,23 @@ MonoBehaviour:
       m_Action: Aim
       m_Flags: 8
     m_Flags: 0
-  cursor: {fileID: 0}
+  changeWeapon:
+    m_Name: Change Weapon
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 188d814a-392d-4ccf-ab6a-a2d4a86b2972
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: da466fb7-1a4b-4a8b-80ca-20cfa3028863
+      m_Path: <Keyboard>/q
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Change Weapon
+      m_Flags: 0
+    m_Flags: 0
   bullet: {fileID: 6565926282983055127, guid: 81fb5c0679e7ac34c92c09c436a375a0, type: 3}
 --- !u!114 &6700172748614981412
 MonoBehaviour:
@@ -209,7 +225,7 @@ MonoBehaviour:
       m_Action: Move
       m_Flags: 8
     m_Flags: 0
-  movementSpeed: 5
+  movementSpeed: 10
 --- !u!50 &6700172748614981411
 Rigidbody2D:
   serializedVersion: 4
