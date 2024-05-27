@@ -78,7 +78,7 @@ namespace PlayerSystem
             {
                 _ingameManager.ChangePlayerActiveState();
                 _ingameManager.GetNewBounty();
-                _ingameManager.ChangeCursorVisibility();
+                _ingameManager.EnableCursorVisibility();
                 return;
             }
             

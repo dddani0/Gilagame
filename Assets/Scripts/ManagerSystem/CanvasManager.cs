@@ -28,8 +28,8 @@ namespace ManagerSystem
 
         void Start()
         {
-            _playerShooter = GameObject.Find("Player").GetComponent<PlayerShooter>();
-            _player = GameObject.Find("Player").GetComponent<Player>();
+            _playerShooter = GameObject.Find(TagManager.Instance.PlayerTag).GetComponent<PlayerShooter>();
+            _player = _playerShooter.GetComponent<Player>();
         }
 
         void Update()

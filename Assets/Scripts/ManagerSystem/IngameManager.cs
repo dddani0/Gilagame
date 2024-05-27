@@ -53,7 +53,7 @@ namespace ManagerSystem
                     _spawns = GameObject.Find("SpawnPositions").GetComponentsInChildren<Transform>();
                 }
             }
-            _crosshair.IsActive = SceneManager.GetActiveScene().name.Equals("EchoWaveTown");
+            _crosshair.IsActive = SceneManager.GetActiveScene().name.ToLower().Equals("echowavetown");
         }
 
         public void GetNewBounty()
@@ -79,7 +79,8 @@ namespace ManagerSystem
 
         public void ChangeBountyStatus() => isBountyInProgress = isBountyInProgress is false;
 
-        public void ChangeCursorVisibility() => Cursor.visible = Cursor.visible is false;
+        public void EnableCursorVisibility() => Cursor.visible = true;
+        public void DisableCursorVisibility() => Cursor.visible = false;
 
         public void ChangePlayerActiveState() => _isActive = _isActive is false;
 

@@ -21,7 +21,7 @@ namespace DefaultNamespace
 
         public string IngameManagerTag => "IngameManager";
         public string CanvasManagerTag => "CanvasManager";
-
+        public string WeaponDisplayTag => "DisplayWeapon";
         public string ShopManagerTag => "ShopManager";
 
         //

@@ -12,19 +12,28 @@ namespace DefaultNamespace
 
         private void Start()
         {
-            _playerShooter = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerShooter>();
-            _weaponDisplay = GameObject.FindGameObjectWithTag("DisplayWeapon");
+            _playerShooter = GameObject.FindGameObjectWithTag(TagManager.Instance.PlayerTag)
+                .GetComponent<PlayerShooter>();
+            _weaponDisplay = GameObject.FindGameObjectWithTag(TagManager.Instance.WeaponDisplayTag);
         }
 
         private void Update()
         {
-            if (_isActive is false)
-            {
-                transform.LookAt(-_weaponDisplay.transform.right);
-                return;
-            }
+            AimCursor();
             transform.position = _playerShooter.GetMousePositionVector2();
-            _weaponDisplay.transform.LookAt(GetPosition());
+        }
+
+        private void AimCursor()
+        {
+            switch (_isActive)
+            {
+                case true:
+                    _weaponDisplay.transform.LookAt(GetPosition());
+                    break;
+                case false:
+                    transform.LookAt(-_weaponDisplay.transform.right);
+                    break;
+            }
         }
 
         private Vector2 GetPosition() => transform.position;

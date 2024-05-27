@@ -9,4 +9,5 @@ public class ShopManager : MonoBehaviour
     private bool _isBusy;
 
     public void ChangeShopState() => _isBusy = _isBusy is false;
+    public bool IsBusy => _isBusy;
 }

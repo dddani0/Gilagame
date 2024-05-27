@@ -39,13 +39,17 @@ public class ButtonManager : MonoBehaviour
         ingameManager.ChangeBountyStatus();
         ingameManager.SpawnEnemy();
         bountyUI.SetActive(false);
-        ingameManager.ChangeCursorVisibility();
+        ingameManager.DisableCursorVisibility();
     }
 
     public void ExitShop()
     {
-        GameObject.FindGameObjectWithTag(TagManager.Instance.IngameManagerTag).GetComponent<IngameManager>()
-            .ChangePlayerActiveState();
+        GameObject.FindGameObjectWithTag(TagManager.Instance.ShopManagerTag).GetComponent<ShopManager>()
+            .ChangeShopState();
+        var ingameManager = GameObject.FindGameObjectWithTag(TagManager.Instance.IngameManagerTag)
+            .GetComponent<IngameManager>();
+        ingameManager.ChangePlayerActiveState();
+        ingameManager.DisableCursorVisibility();
         GameObject.FindGameObjectWithTag(TagManager.Instance.CanvasManagerTag).GetComponent<CanvasManager>()
             .DisableShop();
     }

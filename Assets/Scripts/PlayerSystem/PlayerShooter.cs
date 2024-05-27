@@ -1,4 +1,5 @@
 ﻿using ManagerSystem;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,7 +14,7 @@ namespace DefaultNamespace
         private int _ammunition;
 
         private IngameManager _ingameManager;
-        
+
         private Timer _fireRate;
 
         //
@@ -21,6 +22,8 @@ namespace DefaultNamespace
         public InputAction reload;
         public InputAction aim;
         public GameObject bullet;
+
+        public TMPro.TextMeshPro buttonPrompter;
 
         private void OnEnable()
         {
@@ -44,7 +47,9 @@ namespace DefaultNamespace
             shoot.performed += Shoot;
             reload.performed += Reload;
             _ingameManager = GameObject.Find("IngameManager").GetComponent<IngameManager>();
-            _ingameManager.ChangeCursorVisibility();
+            _ingameManager.DisableCursorVisibility();
+            buttonPrompter = transform.GetChild(1).GetComponent<TextMeshPro>();
+            buttonPrompter.gameObject.SetActive(false);
         }
 
         private void Update()
@@ -68,15 +73,19 @@ namespace DefaultNamespace
             //Below is the post-rotation setting, which works.
             //I suspect, that Quaternion.Euler rotates a bit and it alters the rotation.
             var shot = Instantiate(bullet, transform.position, quaternion.identity);
-            shot.transform.localEulerAngles = new Vector3(0, 0, GetCrosshairRotation()); 
+            shot.transform.localEulerAngles = new Vector3(0, 0, GetCrosshairRotation());
             _fireRate.ResetTimer();
             _ammunition--;
         }
+
+        public void EnableButtonPrompter() => buttonPrompter.gameObject.SetActive(true);
+        public void DisableButtonPrompter() => buttonPrompter.gameObject.SetActive(false);
 
         public Vector2 GetPositionVector2() => transform.position;
         private bool CanFireGun() => _fireRate.IsCooldown() is false && _ammunition > 0;
         public Vector3 GetMousePosition() => Camera.main!.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         public Vector2 GetMousePositionVector2() => GetMousePosition();
+
         public float GetCrosshairRotation() =>
             Vector2.SignedAngle(
                 ObjectSpinner.DirectionVector(
@@ -87,5 +96,7 @@ namespace DefaultNamespace
                     GetMousePositionVector2()));
 
         public int GetAmmunition() => _ammunition;
+
+        public TextMeshPro getPrompter => buttonPrompter;
     }
 }
