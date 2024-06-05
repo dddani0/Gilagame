@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: Whiskey
   price: 20
-  available: 0
-  sprite: {fileID: 0}
+  sprite: {fileID: 21300000, guid: cfc38205c1073e946aa782cc946ae7c4, type: 3}
+  type: 0

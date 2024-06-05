@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 678bc71987ea47ac88cc9ae4e3194d2a, type: 3}
-  m_Name: Enemy
+  m_Name: EnemyVar1
   m_EditorClassIdentifier: 
-  name: Test
-  health: 2
-  speed: 2
-  distance: 5
+  name: 
+  health: 1
+  speed: 3
+  distance: 6

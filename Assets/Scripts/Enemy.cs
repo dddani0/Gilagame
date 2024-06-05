@@ -6,11 +6,14 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour, IEntity
 {
     public Entity origin;
+
     //
     private int _health;
     private NavMeshAgent _agent;
     private GameObject _player;
+
     private Transform _spriteTransform;
+
     //
     private bool _isDetected = false;
     private LayerMask _playerLayer = 6;
@@ -20,12 +23,14 @@ public class Enemy : MonoBehaviour, IEntity
 
     private Rigidbody2D _rigidbody2D;
     private Animator _animator;
+    private PlayerShooter _playerShooter;
 
     private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _agent = GetComponent<NavMeshAgent>();
         _player = GameObject.FindGameObjectWithTag(TagManager.Instance.PlayerTag);
+        _playerShooter = _player.GetComponent<PlayerShooter>();
         _agent.updateRotation = false;
         _agent.updateUpAxis = false;
         _agent.speed = origin.speed;
@@ -58,7 +63,7 @@ public class Enemy : MonoBehaviour, IEntity
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Bullet")) return;
-        Damage(1);
+        Damage(_playerShooter.gunOrigin.damage);
     }
 
     public void Heal(int addition)
@@ -73,8 +78,9 @@ public class Enemy : MonoBehaviour, IEntity
         {
             _agent.speed = 0;
             gameObject.tag = "Corpse";
-            enabled = false; 
+            enabled = false;
         }
+
         if (_isDetected) return;
         _isDetected = _isDetected is false;
     }
@@ -113,8 +119,7 @@ public class Enemy : MonoBehaviour, IEntity
     private bool IsAlive() => _health > 0;
 
     public bool IsPlayerInSight() =>
-        Physics2D.Raycast(GetPositionVector2(), PlayerDirection(), origin.distance).collider is not null &&
-        Physics2D.Raycast(GetPositionVector2(), PlayerDirection(), origin.distance).collider.gameObject.layer.Equals(6);
+        Physics2D.Raycast(GetPositionVector2(), PlayerDirection(), origin.distance, 1 << 6).collider is not null;
 
     private float GetPlayerDistance() => Vector2.Distance(_player.transform.position, transform.position);
     private Vector2 PlayerDirection() => ObjectSpinner.DirectionVector(GetPositionVector2(), PlayerPosition());

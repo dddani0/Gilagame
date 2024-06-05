@@ -25,7 +25,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289420428279845344}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -109,8 +109,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+    rgba: 4280025343
+  m_fontColor: {r: 1, g: 0, b: 0.10950947, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 2
+  m_fontStyle: 3
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -308,6 +308,7 @@ MonoBehaviour:
       m_Flags: 8
     m_Flags: 0
   bullet: {fileID: 6565926282983055127, guid: 81fb5c0679e7ac34c92c09c436a375a0, type: 3}
+  buttonPrompter: {fileID: 0}
 --- !u!114 &6700172748614981412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -381,7 +382,7 @@ MonoBehaviour:
       m_Action: Move
       m_Flags: 8
     m_Flags: 0
-  movementSpeed: 5
+  movementSpeed: 15
 --- !u!50 &6700172748614981411
 Rigidbody2D:
   serializedVersion: 4
@@ -529,7 +530,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 2084246387, guid: b0b3654a15e872c45be76f3a41ff082f, type: 3}
+  m_Sprite: {fileID: -1848520958, guid: 0eaac4867eb03db42b29e511e487015f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

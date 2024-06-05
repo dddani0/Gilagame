@@ -46,7 +46,7 @@ namespace DefaultNamespace
             _fireRate = new Timer(gunOrigin.fireRate);
             shoot.performed += Shoot;
             reload.performed += Reload;
-            _ingameManager = GameObject.Find("IngameManager").GetComponent<IngameManager>();
+            _ingameManager = GameObject.Find(TagManager.Instance.IngameManagerTag).GetComponent<IngameManager>();
             _ingameManager.DisableCursorVisibility();
             buttonPrompter = transform.GetChild(1).GetComponent<TextMeshPro>();
             buttonPrompter.gameObject.SetActive(false);

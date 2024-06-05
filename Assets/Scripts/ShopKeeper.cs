@@ -165,11 +165,15 @@ public class ShopKeeper : MonoBehaviour
     {
         if (item.Available is false) return;
         if (_player.Money < item.GetItem.price) return;
-        item.ChangeAvailability();
         _player.DecrementMoney(item.GetItem.price);
         PlayerPrefs.SetInt("Money", _player.Money);
-        PlayerPrefs.SetString(item.GetItem.name, $"{item.GetItem.name};{item.Available}");
-        UpdateItem(item.GetItem);
+        if (item.GetItem.type != ItemType.Consumeable)
+        {
+            item.ChangeAvailability();
+            PlayerPrefs.SetString(item.GetItem.name, $"{item.GetItem.name};{item.Available}");
+            UpdateItem(item.GetItem);
+        }
+
         switch (item.GetItem.type)
         {
             case ItemType.Consumeable:
