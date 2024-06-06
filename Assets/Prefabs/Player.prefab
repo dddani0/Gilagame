@@ -382,7 +382,24 @@ MonoBehaviour:
       m_Action: Move
       m_Flags: 8
     m_Flags: 0
-  movementSpeed: 15
+  openBillboard:
+    m_Name: Open Billboard
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: cb709a30-5bb7-429f-bd2f-327f007c2338
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: dbe307fa-6a7b-4031-a7c2-5c3d6fc12098
+      m_Path: <Keyboard>/e
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Open Billboard
+      m_Flags: 0
+    m_Flags: 0
+  movementSpeed: 10
 --- !u!50 &6700172748614981411
 Rigidbody2D:
   serializedVersion: 4

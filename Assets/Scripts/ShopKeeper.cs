@@ -207,7 +207,7 @@ public class ShopKeeper : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag(TagManager.Instance.PlayerTag)) return;
-        _playerShooterComponent.EnableButtonPrompter();
+        _playerShooterComponent.ShowButtonPrompter(enterShop);
         _playercol = other;
     }
 

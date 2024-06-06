@@ -78,7 +78,13 @@ namespace DefaultNamespace
             _ammunition--;
         }
 
-        public void EnableButtonPrompter() => buttonPrompter.gameObject.SetActive(true);
+        public void ShowButtonPrompter(InputAction key)
+        {
+            EnableButtonPrompter();
+            buttonPrompter.text = $"Press '{key.GetBindingDisplayString()}'";
+        }
+
+        private void EnableButtonPrompter() => buttonPrompter.gameObject.SetActive(true);
         public void DisableButtonPrompter() => buttonPrompter.gameObject.SetActive(false);
 
         public Vector2 GetPositionVector2() => transform.position;

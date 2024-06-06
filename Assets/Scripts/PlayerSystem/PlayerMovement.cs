@@ -1,3 +1,4 @@
+using System;
 using System.Security.Cryptography;
 using DefaultNamespace;
 using ManagerSystem;
@@ -10,21 +11,26 @@ namespace PlayerSystem
 {
     public class PlayerMovement : MonoBehaviour
     {
+        private PlayerShooter _playerShooter;
         public InputAction move;
+        public InputAction openBillboard;
         private Vector2 _input;
         public float movementSpeed;
         private Rigidbody2D _playerPhysicsRigidbody;
         private Animator _animation;
         private IngameManager _ingameManager;
+        private Collider2D _collidingObject;
 
         private void OnEnable()
         {
             move.Enable();
+            openBillboard.Enable();
         }
 
         private void OnDisable()
         {
             move.Disable();
+            openBillboard.Disable();
         }
 
         void Start()
@@ -32,7 +38,8 @@ namespace PlayerSystem
             _playerPhysicsRigidbody = GetComponent<Rigidbody2D>();
             _animation = GetComponentInChildren<Animator>();
             _ingameManager = GameObject.Find(TagManager.Instance.IngameManagerTag).GetComponent<IngameManager>();
-            
+            _playerShooter = GetComponent<PlayerShooter>();
+
             if (SceneManager.GetActiveScene().name.Equals("EchowaveTown") is false) return;
             //only set a new position, when the player actually enters the hub area.
             var rawPosition = PlayerPrefs.GetString("pos");
@@ -50,6 +57,9 @@ namespace PlayerSystem
                 _playerPhysicsRigidbody.velocity = Vector2.zero;
                 return;
             }
+
+            EnterBillboard();
+
             FetchInput();
             _playerPhysicsRigidbody.velocity = _input * (movementSpeed * (1 / Time.deltaTime) * Time.deltaTime);
             _animation.SetFloat("horizontal", _input.x);
@@ -62,26 +72,38 @@ namespace PlayerSystem
             _input = move.ReadValue<Vector2>();
         }
 
+        private void EnterBillboard()
+        {
+            if (_collidingObject == null)
+            {
+                _playerShooter.DisableButtonPrompter();
+                return;
+            }
+            if (!_playerShooter.buttonPrompter.IsActive() || !openBillboard.WasPressedThisFrame() ||
+                SceneManager.GetActiveScene().name.ToLower().Equals("echowavetown") is false) return;
+            _ingameManager.ChangePlayerActiveState();
+            _ingameManager.GetNewBounty();
+            _ingameManager.EnableCursorVisibility();
+        }
+
         private void OnTriggerEnter2D(Collider2D collidingObject)
         {
+            _collidingObject = collidingObject;
             const float positionOffset = 5f;
             if (collidingObject.CompareTag(TagManager.Instance.CorpseTag))
             {
-                
                 var corpse = collidingObject.gameObject;
                 Destroy(corpse);
                 _ingameManager.CompleteBounty();
             }
+            if (IsBillboardTrigger())
+            {
+                _playerShooter.ShowButtonPrompter(openBillboard);
+            }
+
             if (_ingameManager.isBountyInProgress) return;
             if (IsTriggerEnter() is false) return;
-            if (IsFallacyTrigger())
-            {
-                _ingameManager.ChangePlayerActiveState();
-                _ingameManager.GetNewBounty();
-                _ingameManager.EnableCursorVisibility();
-                return;
-            }
-            
+
 
             if (IsExitTrigger())
             {
@@ -89,7 +111,7 @@ namespace PlayerSystem
                 return;
             }
 
-            PlayerPrefs.SetString("pos", PositionSaveParser(transform.position));
+            PlayerPrefs.SetString(TagManager.Instance.PlayerPositionTag, PositionSaveParser(transform.position));
             switch (collidingObject.gameObject.name.ToLower())
             {
                 case "saloontrigger":
@@ -111,11 +133,16 @@ namespace PlayerSystem
             string PositionSaveParser(Vector3 position)
                 => $"{position.x}|{position.y - positionOffset}|{position.z}";
 
-            bool IsFallacyTrigger()
+            bool IsBillboardTrigger()
                 => collidingObject.gameObject.name.ToLower().Equals("billboardtrigger");
 
             bool IsExitTrigger()
                 => collidingObject.gameObject.name.ToLower().Equals("exittrigger");
+        }
+
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            _collidingObject = null;
         }
     }
 }

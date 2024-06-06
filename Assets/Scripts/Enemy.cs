@@ -56,13 +56,13 @@ public class Enemy : MonoBehaviour, IEntity
         if (_isDetected) return;
         if (IsPlayerWithinRadius() is false) return;
         if (IsInConeOfVision() is false) return;
-        if (IsPlayerInSight() is false) return;
+        if (IsPlayerInSight(origin.distance) is false) return;
         _isDetected = _isDetected is false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Bullet")) return;
+        if (!other.CompareTag(TagManager.Instance.BulletTag)) return;
         Damage(_playerShooter.gunOrigin.damage);
     }
 
@@ -77,7 +77,8 @@ public class Enemy : MonoBehaviour, IEntity
         if (IsAlive() is false)
         {
             _agent.speed = 0;
-            gameObject.tag = "Corpse";
+            gameObject.tag = TagManager.Instance.CorpseTag;
+            //set animation to death.
             enabled = false;
         }
 
@@ -93,7 +94,7 @@ public class Enemy : MonoBehaviour, IEntity
             return;
         }
 
-        if (IsPlayerInSight() is false) return;
+        if (IsPlayerInSight(Mathf.Infinity) is false) return;
 
         var shot = Instantiate(bullet, GetPositionVector2() + PlayerDirection(), quaternion.identity);
         shot.transform.localEulerAngles =
@@ -118,8 +119,8 @@ public class Enemy : MonoBehaviour, IEntity
     private bool IsPlayerWithinRadius() => GetPlayerDistance() < origin.distance;
     private bool IsAlive() => _health > 0;
 
-    public bool IsPlayerInSight() =>
-        Physics2D.Raycast(GetPositionVector2(), PlayerDirection(), origin.distance, 1 << 6).collider is not null;
+    public bool IsPlayerInSight(float distanceLenght) =>
+        Physics2D.Raycast(GetPositionVector2(), PlayerDirection(), distanceLenght, 1 << 6).collider is not null;
 
     private float GetPlayerDistance() => Vector2.Distance(_player.transform.position, transform.position);
     private Vector2 PlayerDirection() => ObjectSpinner.DirectionVector(GetPositionVector2(), PlayerPosition());

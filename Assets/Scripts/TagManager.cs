@@ -29,5 +29,9 @@ namespace DefaultNamespace
         public string CorpseTag => "Corpse";
         public string CrosshairTag => "Crosshair";
         public string ShopItemTag => "ShopItem";
+        public string BulletTag => "Bullet";
+        public string PlayerPositionTag => "pos";
+        public string TriggerTag => "trigger";
+        
     }
 }
