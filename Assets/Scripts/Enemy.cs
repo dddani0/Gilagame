@@ -39,6 +39,12 @@ public class Enemy : MonoBehaviour, IEntity
         _animator = transform.GetChild(0).gameObject.GetComponent<Animator>();
         print($"transform.GetChild(0): {_spriteTransform.gameObject}"); //EZT NE TÖRÖLD MÉG KI
         _shootTimer = new Timer(shootCooldownSeconds);
+        _animator.SetBool("isAlive", true);
+        Player.PlayerDeath += () =>
+        {
+            _agent.speed = 0;
+            enabled = false;
+        };
     }
 
     private void Update()
@@ -78,7 +84,7 @@ public class Enemy : MonoBehaviour, IEntity
         {
             _agent.speed = 0;
             gameObject.tag = TagManager.Instance.CorpseTag;
-            //set animation to death.
+            _animator.SetBool("isAlive", false);
             enabled = false;
         }
 

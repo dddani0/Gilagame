@@ -39,7 +39,7 @@ namespace PlayerSystem
             _animation = GetComponentInChildren<Animator>();
             _ingameManager = GameObject.Find(TagManager.Instance.IngameManagerTag).GetComponent<IngameManager>();
             _playerShooter = GetComponent<PlayerShooter>();
-
+            _animation.SetBool("isAlive", true);
             if (SceneManager.GetActiveScene().name.Equals("EchowaveTown") is false) return;
             //only set a new position, when the player actually enters the hub area.
             var rawPosition = PlayerPrefs.GetString("pos");
@@ -79,6 +79,7 @@ namespace PlayerSystem
                 _playerShooter.DisableButtonPrompter();
                 return;
             }
+
             if (!_playerShooter.buttonPrompter.IsActive() || !openBillboard.WasPressedThisFrame() ||
                 SceneManager.GetActiveScene().name.ToLower().Equals("echowavetown") is false) return;
             _ingameManager.ChangePlayerActiveState();
@@ -96,6 +97,7 @@ namespace PlayerSystem
                 Destroy(corpse);
                 _ingameManager.CompleteBounty();
             }
+
             if (IsBillboardTrigger())
             {
                 _playerShooter.ShowButtonPrompter(openBillboard);
@@ -123,6 +125,9 @@ namespace PlayerSystem
                 case "gunsmithtrigger":
                     SceneManager.LoadScene(3);
                     break;
+                case "churchtrigger":
+                    SceneManager.LoadScene(5);
+                    break;
             }
 
             return;
@@ -144,5 +149,8 @@ namespace PlayerSystem
         {
             _collidingObject = null;
         }
+
+        public Animator GetAnimator() => _animation;
+        public Rigidbody2D GetRigidbody() => _playerPhysicsRigidbody;
     }
 }

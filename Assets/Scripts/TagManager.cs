@@ -26,6 +26,7 @@ namespace DefaultNamespace
 
         //
         public string PlayerTag => "Player";
+        public string EnemyTag => "Enemy";
         public string CorpseTag => "Corpse";
         public string CrosshairTag => "Crosshair";
         public string ShopItemTag => "ShopItem";

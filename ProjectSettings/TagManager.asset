@@ -13,6 +13,7 @@ TagManager:
   - Corpse
   - ShopManager
   - ShopItem
+  - Enemy
   layers:
   - Default
   - TransparentFX

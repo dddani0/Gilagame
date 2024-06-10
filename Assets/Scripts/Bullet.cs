@@ -11,17 +11,18 @@ namespace DefaultNamespace
         private void Start()
         {
             _bulletRigidbody = GetComponent<Rigidbody2D>();
-            Destroy(this,5f);
+            Destroy(this, 5f);
         }
 
         private void FixedUpdate()
         {
             _bulletRigidbody.velocity = ((Vector2)transform.up) * (_speed * Time.deltaTime);
         }
-        
+
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.CompareTag("Player") is false) Destroy(gameObject);
+            if (!other.CompareTag(TagManager.Instance.EnemyTag)) return;
+            Destroy(gameObject);
         }
     }
 }

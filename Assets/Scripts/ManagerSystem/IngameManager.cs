@@ -86,6 +86,9 @@ namespace ManagerSystem
 
         public void SpawnEnemy()
         {
+            //spawn with random enemy asset.
+            //spawn bodyguards in radius
+            //spawn arrow which points to the enemy
             var randomEnemy = enemies[(int)RandomNumberGenerator.Instance.Generate(0, enemies.Length - 1)].gameObject;
             var randomPosition = _spawns[(int)RandomNumberGenerator.Instance.Generate(1, _spawns.Length)].position;
             Instantiate(randomEnemy, randomPosition, Quaternion.identity);
