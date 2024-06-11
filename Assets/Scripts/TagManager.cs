@@ -35,5 +35,9 @@ namespace DefaultNamespace
         public string TriggerTag => "trigger";
         public string SignTrigger => "signtrigger";
 
+        // save tags
+        public string MoneySaveTag => "Money";
+        public string InventoryStateSaveTag => "InventoryState";
+        public string PlayerPositionSaveTag => "pos";
     }
 }

@@ -1,4 +1,6 @@
-﻿using ManagerSystem;
+using System.Collections.Generic;
+using System.Linq;
+using ManagerSystem;
 using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
@@ -12,7 +14,9 @@ namespace DefaultNamespace
         public Gun gunOrigin;
         private string _gunName;
         private int _ammunition;
-
+        private int _gunIdx;
+        private bool _singleGun;
+        private List<Gun> _gunInventory;
         private IngameManager _ingameManager;
 
         private Timer _fireRate;
@@ -21,6 +25,7 @@ namespace DefaultNamespace
         public InputAction shoot;
         public InputAction reload;
         public InputAction aim;
+        public InputAction changeWeapon;
         public GameObject bullet;
 
         public TMPro.TextMeshPro buttonPrompter;
@@ -33,6 +38,7 @@ namespace DefaultNamespace
             shoot.Enable();
             reload.Enable();
             aim.Enable();
+            changeWeapon.Enable();
         }
 
         private void OnDisable()
@@ -40,13 +46,33 @@ namespace DefaultNamespace
             shoot.Disable();
             reload.Disable();
             aim.Disable();
+            changeWeapon.Disable();
         }
 
         private void Start()
         {
-            _ammunition = gunOrigin.ammunition;
-            _gunName = gunOrigin.name;
-            _fireRate = new Timer(gunOrigin.fireRate);
+            var inventoryState = PlayerPrefs.GetString(TagManager.Instance.InventoryStateSaveTag).Split(';');
+            var currentGunState = inventoryState[0].Split("##");
+            _currentGun = Gun.CreateGun(currentGunState[0], int.Parse(currentGunState[1]),
+                int.Parse(currentGunState[2]),
+                int.Parse(currentGunState[3]));
+            _gunInventory = new List<Gun> { _currentGun };
+            if (inventoryState.Length > 1)
+            {
+                for (int i = 0; i < inventoryState.Length; i++) //because of the extra ';'
+                {
+                    var currentIterationOfGun = inventoryState[i].Split("##");
+                    _gunInventory.Add(Gun.CreateGun(
+                            currentIterationOfGun[0].ToString(),
+                            int.Parse(currentIterationOfGun[1]),
+                            int.Parse(currentIterationOfGun[2]),
+                            int.Parse(currentIterationOfGun[3])
+                        )
+                    );
+                }
+            }
+
+            UpdateGun();
             shoot.performed += Shoot;
             reload.performed += Reload;
             _ingameManager = GameObject.Find(TagManager.Instance.IngameManagerTag).GetComponent<IngameManager>();
@@ -54,6 +80,25 @@ namespace DefaultNamespace
             buttonPrompter = transform.GetChild(1).GetComponent<TextMeshPro>();
             buttonPrompter.gameObject.SetActive(false);
             _arrow = transform.GetChild(2).gameObject;
+            changeWeapon.performed += ChangeWeapon;
+            _ingameManager = GameObject.Find(TagManager.Instance.IngameManagerTag).GetComponent<IngameManager>();
+        }
+
+        public void EquipNewGun(Gun newGun)
+        {
+            //Playerpref
+            AddGunToInventory(newGun);
+            var gunSave = PlayerPrefs.GetString(TagManager.Instance.InventoryStateSaveTag) + _gunInventory.Aggregate("",
+                (current, gon) => current + $";{gon.name}##{gon.ammunition}##{gon.damage}##{gon.fireRate}");
+            PlayerPrefs.SetString(TagManager.Instance.InventoryStateSaveTag, gunSave);
+        }
+
+        private void ChangeWeapon(InputAction.CallbackContext obj)
+        {
+            if (_singleGun) return;
+            _gunIdx = IncrementGunIndex();
+            _currentGun = _gunInventory[_gunIdx];
+            UpdateGun();
         }
 
         private void Update()
@@ -63,14 +108,23 @@ namespace DefaultNamespace
             {
                 _arrow.transform.localEulerAngles = new Vector3(0, 0, GetArrowTargetRotation());
             }
+            _singleGun = _gunInventory.Count == 1;
             if (_ingameManager.IsActive is false) return;
             if (CanFireGun()) _fireRate.DecreaseTimer(Time.deltaTime);
             if (_fireRate.IsCooldown()) _fireRate.DecreaseTimer(Time.deltaTime);
         }
 
+        private void UpdateGun()
+        {
+            _fireRate = new Timer(_currentGun.fireRate);
+            _ammunition = _currentGun.ammunition;
+        }
+
+        private void AddGunToInventory(Gun newGun) => _gunInventory.Add(newGun);
+
         private void Reload(InputAction.CallbackContext obj)
         {
-            _ammunition = gunOrigin.ammunition;
+            _ammunition = _currentGun.ammunition;
         }
 
         private void Shoot(InputAction.CallbackContext obj)
@@ -113,6 +167,13 @@ namespace DefaultNamespace
         public Vector3 GetMousePosition() => Camera.main!.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         public Vector2 GetMousePositionVector2() => GetMousePosition();
 
+
+        public int IncrementGunIndex()
+        {
+            if (_gunIdx == _gunInventory.Count - 1) return 0;
+            return (_gunIdx + 1);
+        }
+
         public float GetCrosshairRotation() =>
             Vector2.SignedAngle(
                 ObjectSpinner.DirectionVector(
@@ -128,5 +189,6 @@ namespace DefaultNamespace
             ObjectSpinner.DirectionVector(GetPositionVector2(), (Vector2)target.position));
 
         public int GetAmmunition() => _ammunition;
+        public Gun GetGun() => _currentGun;
     }
 }

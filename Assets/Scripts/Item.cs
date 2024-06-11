@@ -15,4 +15,7 @@ public class Item : ScriptableObject
     public int price;
     public Sprite sprite;
     public ItemType type;
+    public int damage;
+    public int ammunition;
+    public int fireRate;
 }

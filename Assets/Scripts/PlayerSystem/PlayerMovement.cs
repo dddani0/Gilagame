@@ -1,4 +1,3 @@
-using System;
 using System.Security.Cryptography;
 using DefaultNamespace;
 using ManagerSystem;
@@ -42,7 +41,7 @@ namespace PlayerSystem
             _animation.SetBool("isAlive", true);
             if (SceneManager.GetActiveScene().name.Equals("EchowaveTown") is false) return;
             //only set a new position, when the player actually enters the hub area.
-            var rawPosition = PlayerPrefs.GetString("pos");
+            var rawPosition = PlayerPrefs.GetString(TagManager.Instance.PlayerPositionSaveTag);
             transform.position = new Vector3(
                 float.Parse(rawPosition.Split("|")[0]),
                 float.Parse(rawPosition.Split("|")[1]),

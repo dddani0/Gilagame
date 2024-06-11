@@ -103,7 +103,8 @@ MonoBehaviour:
   m_text: Press 'E'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f5eb4bc3e5eafe641ac34285b7614fef, type: 2}
-  m_sharedMaterial: {fileID: -3804312878455846382, guid: f5eb4bc3e5eafe641ac34285b7614fef, type: 2}
+  m_sharedMaterial: {fileID: -3804312878455846382, guid: f5eb4bc3e5eafe641ac34285b7614fef,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -391,6 +392,23 @@ MonoBehaviour:
       m_Groups: 
       m_Action: Aim
       m_Flags: 8
+    m_Flags: 0
+  changeWeapon:
+    m_Name: Change Weapon
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 188d814a-392d-4ccf-ab6a-a2d4a86b2972
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: da466fb7-1a4b-4a8b-80ca-20cfa3028863
+      m_Path: <Keyboard>/q
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Change Weapon
+      m_Flags: 0
     m_Flags: 0
   bullet: {fileID: 6565926282983055127, guid: 81fb5c0679e7ac34c92c09c436a375a0, type: 3}
   buttonPrompter: {fileID: 0}

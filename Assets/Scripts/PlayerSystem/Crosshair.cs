@@ -8,7 +8,7 @@ namespace DefaultNamespace
     {
         private PlayerShooter _playerShooter;
         private GameObject _weaponDisplay;
-        private bool _isActive;
+        private bool _isActive = true;
 
         private void Start()
         {

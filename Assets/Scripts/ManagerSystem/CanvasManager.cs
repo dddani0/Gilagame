@@ -7,7 +7,6 @@ namespace ManagerSystem
     public class CanvasManager : MonoBehaviour
     {
         private PlayerShooter _playerShooter;
-
         private Player _player;
 
         //
@@ -41,9 +40,9 @@ namespace ManagerSystem
         {
             ammunitionText.text = _playerShooter.GetAmmunition().ToString();
             moneyText.text = $"{_player.Money.ToString()}$";
-            weaponNameText.text = _playerShooter.gunOrigin.name;
+            weaponNameText.text = _playerShooter.GetGun().name;
         }
-
+        
         public void ShowShop()
         {
             shopElement.SetActive(true);

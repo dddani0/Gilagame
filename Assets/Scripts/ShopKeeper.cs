@@ -180,7 +180,8 @@ public class ShopKeeper : MonoBehaviour
                 _player.Heal(_player.GetMaxHealth - _player.GetHealth());
                 break;
             case ItemType.Weapon:
-                //add to player inventory.
+                _player.gameObject.GetComponent<PlayerShooter>()
+                    .EquipNewGun(Gun.CreateGun(item.GetItem.name, item.GetItem.ammunition, item.GetItem.damage, item.GetItem.fireRate));
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
