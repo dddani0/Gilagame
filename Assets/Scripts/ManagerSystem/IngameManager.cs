@@ -32,6 +32,7 @@ namespace ManagerSystem
         };
 
         public Player player;
+        private PlayerShooter _playerShooter;
 
         public Enemy[] enemies;
         private Transform[] _spawns;
@@ -40,10 +41,12 @@ namespace ManagerSystem
         public bool isBountyInProgress = false;
         private Crosshair _crosshair;
         private bool _isActive = true;
+        private GameObject spawnedEnemy = null;
 
         private void Start()
         {
             player = GameObject.FindGameObjectWithTag(TagManager.Instance.PlayerTag).GetComponent<Player>();
+            _playerShooter = player.GetComponent<PlayerShooter>();
             _canvasManager = GameObject.Find("Canvas").GetComponent<CanvasManager>();
             _crosshair = GameObject.Find(TagManager.Instance.CrosshairTag).GetComponent<Crosshair>();
             if (GameObject.Find("SpawnPositions") != null)
@@ -69,6 +72,8 @@ namespace ManagerSystem
             player.IncrementMoney(_currentBounty.Amount);
             AddMoney(_currentBounty.Amount);
             ChangeBountyStatus();
+            spawnedEnemy = null;
+            _playerShooter.DisableArrow();
         }
 
         public void AddMoney(int amount)
@@ -77,17 +82,25 @@ namespace ManagerSystem
         public void SubtractMoney(int amount)
             => PlayerPrefs.SetInt("Money", PlayerPrefs.GetInt("Money") - amount);
 
-        public void ChangeBountyStatus() => isBountyInProgress = isBountyInProgress is false;
+        public void ChangeBountyStatus()
+        {
+            isBountyInProgress = isBountyInProgress is false;
+            _playerShooter.EnableArrow(spawnedEnemy.transform);
+        }
 
-        public void ChangeCursorVisibility() => Cursor.visible = Cursor.visible is false;
+        public void EnableCursorVisibility() => Cursor.visible = true;
+        public void DisableCursorVisibility() => Cursor.visible = false;
 
         public void ChangePlayerActiveState() => _isActive = _isActive is false;
 
         public void SpawnEnemy()
         {
+            //spawn with random enemy asset.
+            //spawn bodyguards in radius
+            //spawn arrow which points to the enemy
             var randomEnemy = enemies[(int)RandomNumberGenerator.Instance.Generate(0, enemies.Length - 1)].gameObject;
             var randomPosition = _spawns[(int)RandomNumberGenerator.Instance.Generate(1, _spawns.Length)].position;
-            Instantiate(randomEnemy, randomPosition, Quaternion.identity);
+            spawnedEnemy = Instantiate(randomEnemy, randomPosition, Quaternion.identity);
         }
 
         private string GetRandomName()

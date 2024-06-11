@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using ManagerSystem;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,7 +11,8 @@ namespace DefaultNamespace
 {
     public class PlayerShooter : MonoBehaviour
     {
-        private Gun _currentGun;
+        public Gun _currentGun;
+        private string _gunName;
         private int _ammunition;
         private int _gunIdx;
         private bool _singleGun;
@@ -25,6 +27,11 @@ namespace DefaultNamespace
         public InputAction aim;
         public InputAction changeWeapon;
         public GameObject bullet;
+
+        public TMPro.TextMeshPro buttonPrompter;
+        private GameObject _arrow;
+        private bool _isArrowEnabled = false;
+        private Transform target;
 
         private void OnEnable()
         {
@@ -68,9 +75,13 @@ namespace DefaultNamespace
             UpdateGun();
             shoot.performed += Shoot;
             reload.performed += Reload;
+            _ingameManager = GameObject.Find(TagManager.Instance.IngameManagerTag).GetComponent<IngameManager>();
+            _ingameManager.DisableCursorVisibility();
+            buttonPrompter = transform.GetChild(1).GetComponent<TextMeshPro>();
+            buttonPrompter.gameObject.SetActive(false);
+            _arrow = transform.GetChild(2).gameObject;
             changeWeapon.performed += ChangeWeapon;
             _ingameManager = GameObject.Find(TagManager.Instance.IngameManagerTag).GetComponent<IngameManager>();
-            _ingameManager.ChangeCursorVisibility();
         }
 
         public void EquipNewGun(Gun newGun)
@@ -92,6 +103,11 @@ namespace DefaultNamespace
 
         private void Update()
         {
+            _arrow.SetActive(_isArrowEnabled);
+            if (_isArrowEnabled)
+            {
+                _arrow.transform.localEulerAngles = new Vector3(0, 0, GetArrowTargetRotation());
+            }
             _singleGun = _gunInventory.Count == 1;
             if (_ingameManager.IsActive is false) return;
             if (CanFireGun()) _fireRate.DecreaseTimer(Time.deltaTime);
@@ -125,10 +141,32 @@ namespace DefaultNamespace
             _ammunition--;
         }
 
+        public void ShowButtonPrompter(InputAction key)
+        {
+            EnableButtonPrompter();
+            buttonPrompter.text = $"Press '{key.GetBindingDisplayString()}'";
+        }
+
+        public void EnableArrow(Transform targetTransform)
+        {
+            _isArrowEnabled = true;
+            target = targetTransform;
+        }
+
+        public void DisableArrow()
+        {
+            _isArrowEnabled = false;
+            target = transform;
+        }
+
+        private void EnableButtonPrompter() => buttonPrompter.gameObject.SetActive(true);
+        public void DisableButtonPrompter() => buttonPrompter.gameObject.SetActive(false);
+
         public Vector2 GetPositionVector2() => transform.position;
         private bool CanFireGun() => _fireRate.IsCooldown() is false && _ammunition > 0;
         public Vector3 GetMousePosition() => Camera.main!.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         public Vector2 GetMousePositionVector2() => GetMousePosition();
+
 
         public int IncrementGunIndex()
         {
@@ -144,6 +182,11 @@ namespace DefaultNamespace
                 ObjectSpinner.DirectionVector(
                     GetPositionVector2(),
                     GetMousePositionVector2()));
+
+        private float GetArrowTargetRotation() => Vector2.SignedAngle(ObjectSpinner.DirectionVector(
+                GetPositionVector2(),
+                GetPositionVector2() + Vector2.up),
+            ObjectSpinner.DirectionVector(GetPositionVector2(), (Vector2)target.position));
 
         public int GetAmmunition() => _ammunition;
         public Gun GetGun() => _currentGun;

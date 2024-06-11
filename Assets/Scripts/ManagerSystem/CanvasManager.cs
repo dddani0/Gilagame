@@ -24,11 +24,16 @@ namespace ManagerSystem
 
         // shop
         public GameObject shopElement;
+        
+        //info panel
+        public GameObject infoPanelElement;
+        public TMPro.TextMeshProUGUI infoPanelTitle;
+        public TMPro.TextMeshProUGUI infoPanelBody;
 
         void Start()
         {
             _playerShooter = GameObject.Find(TagManager.Instance.PlayerTag).GetComponent<PlayerShooter>();
-            _player = GameObject.Find(TagManager.Instance.PlayerTag).GetComponent<Player>();
+            _player = _playerShooter.GetComponent<Player>();
         }
 
         void Update()
@@ -48,12 +53,25 @@ namespace ManagerSystem
             shopElement.SetActive(false);
         }
 
+        public void ShowInfoPanel(string title, string body)
+        {
+            infoPanelElement.SetActive(true);
+            infoPanelTitle.text = title;
+            infoPanelBody.text = body;
+        }
+
+        public void DisableInfoPanel()
+        {
+            infoPanelElement.SetActive(false);
+        }
+
         public void ShowBounty(Bounty bounty)
         {
             bountyElement.SetActive(true);
             name.text = bounty.Name;
             crime.text = bounty.Crime;
-            bountyAmount.text = bounty.Amount.ToString();
+            bountyAmount.text = $"Reward: {bounty.Amount}";
+            //insert icon
         }
     }
 }

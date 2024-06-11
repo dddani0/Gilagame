@@ -20,5 +20,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Sheriff.unity
     guid: f346c1274561235459d8eb96167f55fe
+  - enabled: 1
+    path: Assets/Scenes/Church.unity
+    guid: 31dfd05d03de64a448f8c6f36dac3dba
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 8c090cc60b12830418fb5b29c83f898f, type: 2}

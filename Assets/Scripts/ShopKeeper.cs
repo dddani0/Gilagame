@@ -36,6 +36,8 @@ public class ShopKeeper : MonoBehaviour
     public Item[] Arsenal;
     List<CatalogItem> _items;
     private Player _player; //Get player once touched.
+    private PlayerShooter _playerShooterComponent;
+    private Collider2D _playercol = null;
 
     private void OnEnable()
     {
@@ -54,11 +56,18 @@ public class ShopKeeper : MonoBehaviour
         _shopManager = GameObject.FindGameObjectWithTag(TagManager.Instance.ShopManagerTag).GetComponent<ShopManager>();
         _ingameManager = GameObject.FindGameObjectWithTag(TagManager.Instance.IngameManagerTag)
             .GetComponent<IngameManager>();
+        _player = GameObject.FindGameObjectWithTag(TagManager.Instance.PlayerTag).GetComponent<Player>();
+        _playerShooterComponent = _player.gameObject.GetComponent<PlayerShooter>();
         _items = new List<CatalogItem>();
         foreach (var item in Arsenal)
         {
             _items.Add(new CatalogItem(item, IsItemAvailable(item)));
         }
+    }
+
+    private void Update()
+    {
+        EnterShop();
     }
 
     private void DisplayItems()
@@ -140,7 +149,7 @@ public class ShopKeeper : MonoBehaviour
     private void UpdateItem(Item selectedItem)
     {
         //Get items and cycle through items.
-        var shopItems = GameObject.FindGameObjectsWithTag("ShopItem");
+        var shopItems = GameObject.FindGameObjectsWithTag(TagManager.Instance.ShopItemTag);
         foreach (var item in shopItems)
         {
             if (!item.name.ToLower().Equals($"{selectedItem.name.ToLower()}item")) continue;
@@ -156,11 +165,15 @@ public class ShopKeeper : MonoBehaviour
     {
         if (item.Available is false) return;
         if (_player.Money < item.GetItem.price) return;
-        item.ChangeAvailability();
         _player.DecrementMoney(item.GetItem.price);
         PlayerPrefs.SetInt("Money", _player.Money);
-        PlayerPrefs.SetString(item.GetItem.name, $"{item.GetItem.name};{item.Available}");
-        UpdateItem(item.GetItem);
+        if (item.GetItem.type != ItemType.Consumeable)
+        {
+            item.ChangeAvailability();
+            PlayerPrefs.SetString(item.GetItem.name, $"{item.GetItem.name};{item.Available}");
+            UpdateItem(item.GetItem);
+        }
+
         switch (item.GetItem.type)
         {
             case ItemType.Consumeable:
@@ -175,6 +188,18 @@ public class ShopKeeper : MonoBehaviour
         }
     }
 
+    private void EnterShop()
+    {
+        if (_shopManager.IsBusy) return;
+        if (_playercol is null) return;
+        if (!_playercol.CompareTag(TagManager.Instance.PlayerTag) || !enterShop.WasPressedThisFrame()) return;
+        _ingameManager.ChangePlayerActiveState();
+        _ingameManager.EnableCursorVisibility();
+        DisplayItems();
+        _canvasManager.ShowShop();
+        _shopManager.ChangeShopState();
+    }
+
     private bool IsItemAvailable(Item item) => PlayerPrefs.GetString(item.name).Split(";")[1]
         .ToLower().ToString()
         .Equals("true");
@@ -182,12 +207,15 @@ public class ShopKeeper : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag(TagManager.Instance.PlayerTag) && enterShop.inProgress is false) return;
-        _player = other.GetComponent<Player>();
-        _ingameManager.ChangeCursorVisibility();
-        _ingameManager.ChangePlayerActiveState();
-        DisplayItems();
-        _canvasManager.ShowShop();
-        _shopManager.ChangeShopState();
+        if (!other.CompareTag(TagManager.Instance.PlayerTag)) return;
+        _playerShooterComponent.ShowButtonPrompter(enterShop);
+        _playercol = other;
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (!other.CompareTag(TagManager.Instance.PlayerTag)) return;
+        _playercol = null;
+        _playerShooterComponent.DisableButtonPrompter();
     }
 }
