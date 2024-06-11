@@ -69,7 +69,7 @@ public class Enemy : MonoBehaviour, IEntity
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag(TagManager.Instance.BulletTag)) return;
-        Damage(_playerShooter.gunOrigin.damage);
+        Damage(_playerShooter.GetGun().damage);
     }
 
     public void Heal(int addition)

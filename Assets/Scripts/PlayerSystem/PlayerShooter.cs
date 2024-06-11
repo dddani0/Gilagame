@@ -11,7 +11,7 @@ namespace DefaultNamespace
 {
     public class PlayerShooter : MonoBehaviour
     {
-        public Gun gunOrigin;
+        public Gun _currentGun;
         private string _gunName;
         private int _ammunition;
         private int _gunIdx;
