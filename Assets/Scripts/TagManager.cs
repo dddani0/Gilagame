@@ -33,6 +33,7 @@ namespace DefaultNamespace
         public string BulletTag => "Bullet";
         public string PlayerPositionTag => "pos";
         public string TriggerTag => "trigger";
-        
+        public string SignTrigger => "signtrigger";
+
     }
 }

@@ -24,6 +24,9 @@ namespace DefaultNamespace
         public GameObject bullet;
 
         public TMPro.TextMeshPro buttonPrompter;
+        private GameObject _arrow;
+        private bool _isArrowEnabled = false;
+        private Transform target;
 
         private void OnEnable()
         {
@@ -50,10 +53,16 @@ namespace DefaultNamespace
             _ingameManager.DisableCursorVisibility();
             buttonPrompter = transform.GetChild(1).GetComponent<TextMeshPro>();
             buttonPrompter.gameObject.SetActive(false);
+            _arrow = transform.GetChild(2).gameObject;
         }
 
         private void Update()
         {
+            _arrow.SetActive(_isArrowEnabled);
+            if (_isArrowEnabled)
+            {
+                _arrow.transform.localEulerAngles = new Vector3(0, 0, GetArrowTargetRotation());
+            }
             if (_ingameManager.IsActive is false) return;
             if (CanFireGun()) _fireRate.DecreaseTimer(Time.deltaTime);
             if (_fireRate.IsCooldown()) _fireRate.DecreaseTimer(Time.deltaTime);
@@ -84,6 +93,18 @@ namespace DefaultNamespace
             buttonPrompter.text = $"Press '{key.GetBindingDisplayString()}'";
         }
 
+        public void EnableArrow(Transform targetTransform)
+        {
+            _isArrowEnabled = true;
+            target = targetTransform;
+        }
+
+        public void DisableArrow()
+        {
+            _isArrowEnabled = false;
+            target = transform;
+        }
+
         private void EnableButtonPrompter() => buttonPrompter.gameObject.SetActive(true);
         public void DisableButtonPrompter() => buttonPrompter.gameObject.SetActive(false);
 
@@ -101,8 +122,11 @@ namespace DefaultNamespace
                     GetPositionVector2(),
                     GetMousePositionVector2()));
 
-        public int GetAmmunition() => _ammunition;
+        private float GetArrowTargetRotation() => Vector2.SignedAngle(ObjectSpinner.DirectionVector(
+                GetPositionVector2(),
+                GetPositionVector2() + Vector2.up),
+            ObjectSpinner.DirectionVector(GetPositionVector2(), (Vector2)target.position));
 
-        public TextMeshPro getPrompter => buttonPrompter;
+        public int GetAmmunition() => _ammunition;
     }
 }

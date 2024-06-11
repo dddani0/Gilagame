@@ -81,7 +81,7 @@ namespace PlayerSystem
             }
 
             if (!_playerShooter.buttonPrompter.IsActive() || !openBillboard.WasPressedThisFrame() ||
-                SceneManager.GetActiveScene().name.ToLower().Equals("echowavetown") is false) return;
+                SceneManager.GetActiveScene().name.ToLower().Equals("echowavetown") is false || _collidingObject.tag.Equals(TagManager.Instance.SignTrigger)) return;
             _ingameManager.ChangePlayerActiveState();
             _ingameManager.GetNewBounty();
             _ingameManager.EnableCursorVisibility();
@@ -139,7 +139,7 @@ namespace PlayerSystem
                 => $"{position.x}|{position.y - positionOffset}|{position.z}";
 
             bool IsBillboardTrigger()
-                => collidingObject.gameObject.name.ToLower().Equals("billboardtrigger");
+                => collidingObject.gameObject.name.ToLower().Contains("billboardtrigger");
 
             bool IsExitTrigger()
                 => collidingObject.gameObject.name.ToLower().Equals("exittrigger");

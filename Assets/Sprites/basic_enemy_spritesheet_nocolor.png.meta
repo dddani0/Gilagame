@@ -545,7 +545,7 @@ TextureImporter:
         width: 222
         height: 373
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -566,7 +566,7 @@ TextureImporter:
         width: 285
         height: 138
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -574,6 +574,27 @@ TextureImporter:
       bones: []
       spriteID: d350a672a27768440b3d289800488f77
       internalID: 397473403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: basic_enemy_spritesheet_nocolor_22
+      rect:
+        serializedVersion: 2
+        x: 135
+        y: 852
+        width: 122
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 67c797e392f22c542bef6a0e5f128194
+      internalID: 1813657968
       vertices: []
       indices: 
       edges: []
@@ -604,6 +625,7 @@ TextureImporter:
       basic_enemy_spritesheet_nocolor_2: 2061641369
       basic_enemy_spritesheet_nocolor_20: -1726349664
       basic_enemy_spritesheet_nocolor_21: 397473403
+      basic_enemy_spritesheet_nocolor_22: 1813657968
       basic_enemy_spritesheet_nocolor_3: -1978423924
       basic_enemy_spritesheet_nocolor_4: -230120405
       basic_enemy_spritesheet_nocolor_5: 799314748
