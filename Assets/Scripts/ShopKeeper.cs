@@ -193,7 +193,7 @@ public class ShopKeeper : MonoBehaviour
         if (_shopManager.IsBusy) return;
         if (_playercol is null) return;
         if (!_playercol.CompareTag(TagManager.Instance.PlayerTag) || !enterShop.WasPressedThisFrame()) return;
-        _ingameManager.ChangePlayerActiveState();
+        _ingameManager.DisablePlayerActiveState();
         _ingameManager.EnableCursorVisibility();
         DisplayItems();
         _canvasManager.ShowShop();

@@ -16,3 +16,6 @@ MonoBehaviour:
   price: 250
   sprite: {fileID: 21300000, guid: 5d3e03925b896ff49b66dafcec7f9850, type: 3}
   type: 1
+  damage: 3
+  ammunition: 2
+  fireRate: 2

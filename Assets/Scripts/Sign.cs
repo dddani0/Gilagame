@@ -32,7 +32,7 @@ public class Sign : MonoBehaviour
         if (_isInPrompt is false) return;
         if (readSign.WasPressedThisFrame() is false) return;
         _canvasManager.ShowInfoPanel(title,bodyContent);
-        _ingameManager.ChangePlayerActiveState();
+        _ingameManager.DisablePlayerActiveState();
         _ingameManager.EnableCursorVisibility();
     }
 

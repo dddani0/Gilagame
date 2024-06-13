@@ -1,6 +1,8 @@
-﻿using BountySystem;
+﻿using System;
+using BountySystem;
 using DefaultNamespace;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace ManagerSystem
@@ -35,13 +37,28 @@ namespace ManagerSystem
         private PlayerShooter _playerShooter;
 
         public Enemy[] enemies;
-        private Transform[] _spawns;
+        public Entity[] enemyEntities;
+        public Transform[] _spawns;
         private CanvasManager _canvasManager;
         private Bounty _currentBounty;
         public bool isBountyInProgress = false;
         private Crosshair _crosshair;
         private bool _isActive = true;
+
         private GameObject spawnedEnemy = null;
+
+        //
+        public InputAction exitButton;
+
+        private void OnEnable()
+        {
+            exitButton.Enable();
+        }
+
+        private void OnDisable()
+        {
+            exitButton.Disable();
+        }
 
         private void Start()
         {
@@ -56,7 +73,18 @@ namespace ManagerSystem
                     _spawns = GameObject.Find("SpawnPositions").GetComponentsInChildren<Transform>();
                 }
             }
-            _crosshair.IsActive = SceneManager.GetActiveScene().name.ToLower().Equals("echowavetown");
+
+            _crosshair.IsActive = SceneManager.GetActiveScene().name.ToLower().Equals("echowavetown") ||
+                                  SceneManager.GetActiveScene().name.ToLower().Equals("howto");
+        }
+
+        private void Update()
+        {
+            if (exitButton.WasPressedThisFrame())
+            {
+                EnableCursorVisibility();
+                SceneManager.LoadScene(0);
+            }
         }
 
         public void GetNewBounty()
@@ -91,26 +119,26 @@ namespace ManagerSystem
         public void EnableCursorVisibility() => Cursor.visible = true;
         public void DisableCursorVisibility() => Cursor.visible = false;
 
-        public void ChangePlayerActiveState() => _isActive = _isActive is false;
+        public void EnablePlayerActiveState() => _isActive = true;
+        public void DisablePlayerActiveState() => _isActive = false;
 
         public void SpawnEnemy()
         {
-            //spawn with random enemy asset.
-            //spawn bodyguards in radius
-            //spawn arrow which points to the enemy
             var randomEnemy = enemies[(int)RandomNumberGenerator.Instance.Generate(0, enemies.Length - 1)].gameObject;
-            var randomPosition = _spawns[(int)RandomNumberGenerator.Instance.Generate(1, _spawns.Length)].position;
+            var randomPosition = _spawns[(int)RandomNumberGenerator.Instance.Generate(1, _spawns.Length - 1)].position;
             spawnedEnemy = Instantiate(randomEnemy, randomPosition, Quaternion.identity);
+            spawnedEnemy.GetComponent<Enemy>()
+                .SetEnemy(enemyEntities[(int)RandomNumberGenerator.Instance.Generate(0, enemyEntities.Length - 1)]);
         }
 
         private string GetRandomName()
         {
-            var firstName = _first[(int)RandomNumberGenerator.Instance.Generate(0, _first.Length)];
-            var secondName = _second[(int)RandomNumberGenerator.Instance.Generate(0, _first.Length)];
+            var firstName = _first[(int)RandomNumberGenerator.Instance.Generate(0, _first.Length - 1)];
+            var secondName = _second[(int)RandomNumberGenerator.Instance.Generate(0, _first.Length - 1)];
             return $"{firstName} {secondName}";
         }
 
-        private string GetRandomCrime() => _crime[(int)RandomNumberGenerator.Instance.Generate(0, _crime.Length)];
+        private string GetRandomCrime() => _crime[(int)RandomNumberGenerator.Instance.Generate(0, _crime.Length - 1)];
 
         private int GetRandomBountyAmount() => (int)RandomNumberGenerator.Instance.Generate(50, 100);
         public bool IsActive => _isActive;

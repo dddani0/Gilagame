@@ -35,7 +35,7 @@ namespace PlayerSystem
         void Start()
         {
             _playerPhysicsRigidbody = GetComponent<Rigidbody2D>();
-            _animation = GetComponentInChildren<Animator>();
+            _animation = transform.GetChild(0).GetComponent<Animator>();
             _ingameManager = GameObject.Find(TagManager.Instance.IngameManagerTag).GetComponent<IngameManager>();
             _playerShooter = GetComponent<PlayerShooter>();
             _animation.SetBool("isAlive", true);
@@ -80,8 +80,10 @@ namespace PlayerSystem
             }
 
             if (!_playerShooter.buttonPrompter.IsActive() || !openBillboard.WasPressedThisFrame() ||
-                SceneManager.GetActiveScene().name.ToLower().Equals("echowavetown") is false || _collidingObject.tag.Equals(TagManager.Instance.SignTrigger)) return;
-            _ingameManager.ChangePlayerActiveState();
+               _collidingObject.tag.Equals(TagManager.Instance.SignTrigger)) return;
+            if (SceneManager.GetActiveScene().name.ToLower().Equals("echowavetown") is false &&
+                SceneManager.GetActiveScene().name.ToLower().Equals("howto") is false) return;
+            _ingameManager.DisablePlayerActiveState();
             _ingameManager.GetNewBounty();
             _ingameManager.EnableCursorVisibility();
         }
@@ -90,19 +92,19 @@ namespace PlayerSystem
         {
             _collidingObject = collidingObject;
             const float positionOffset = 5f;
-            if (collidingObject.CompareTag(TagManager.Instance.CorpseTag))
+            if (collidingObject.CompareTag(TagManager.Instance.CorpseTag)) //corpse
             {
                 var corpse = collidingObject.gameObject;
                 Destroy(corpse);
                 _ingameManager.CompleteBounty();
             }
+            if (_ingameManager.isBountyInProgress) return;
 
-            if (IsBillboardTrigger())
+            if (IsBillboardTrigger()) 
             {
                 _playerShooter.ShowButtonPrompter(openBillboard);
             }
-
-            if (_ingameManager.isBountyInProgress) return;
+            
             if (IsTriggerEnter() is false) return;
 
 
