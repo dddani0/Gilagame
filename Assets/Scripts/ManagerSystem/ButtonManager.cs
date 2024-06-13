@@ -26,7 +26,9 @@ public class ButtonManager : MonoBehaviour
     public void ResetSave(int moneyDefaultValue)
     {
         ResetMoney(moneyDefaultValue);
+        ResetInventoryState();
         ResetPlayerPosition();
+        ResetPlayerHealth();
         PlayerPrefs.SetString(TagManager.Instance.InventoryStateSaveTag,
             $"{defaultGun.name}##{defaultGun.ammunition}##{defaultGun.damage}##{defaultGun.fireRate}");
         foreach (var item in items)
@@ -35,12 +37,13 @@ public class ButtonManager : MonoBehaviour
         }
     }
 
+    public void ResetPlayerHealth() => PlayerPrefs.SetInt(TagManager.Instance.PlayerHealthSaveTag, 3);
     public void ResetPlayerPosition() => PlayerPrefs.SetString(TagManager.Instance.PlayerPositionSaveTag, "-118|11|0");
-
+    public void ResetInventoryState() => PlayerPrefs.SetString(TagManager.Instance.InventoryStateSaveTag, "");
     public static void AcceptBounty(GameObject bountyUI)
     {
         var ingameManager = GameObject.Find(TagManager.Instance.IngameManagerTag).GetComponent<IngameManager>();
-        ingameManager.ChangePlayerActiveState();
+        ingameManager.EnablePlayerActiveState();
         ingameManager.SpawnEnemy();
         ingameManager.ChangeBountyStatus();
         bountyUI.SetActive(false);
@@ -53,9 +56,8 @@ public class ButtonManager : MonoBehaviour
             .ChangeShopState();
         var ingameManager = GameObject.FindGameObjectWithTag(TagManager.Instance.IngameManagerTag)
             .GetComponent<IngameManager>();
-        ingameManager.ChangePlayerActiveState();
+        ingameManager.EnablePlayerActiveState();
         ingameManager.DisableCursorVisibility();
-        ingameManager.ChangePlayerActiveState();
         GameObject.FindGameObjectWithTag(TagManager.Instance.CanvasManagerTag).GetComponent<CanvasManager>()
             .DisableShop();
     }
@@ -65,7 +67,7 @@ public class ButtonManager : MonoBehaviour
         infoPanel.SetActive(false);
         var ingameManager = GameObject.FindGameObjectWithTag(TagManager.Instance.IngameManagerTag)
             .GetComponent<IngameManager>();
-        ingameManager.ChangePlayerActiveState();
+        ingameManager.EnablePlayerActiveState();
         ingameManager.DisableCursorVisibility();
     }
 }

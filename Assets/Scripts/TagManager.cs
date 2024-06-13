@@ -39,5 +39,6 @@ namespace DefaultNamespace
         public string MoneySaveTag => "Money";
         public string InventoryStateSaveTag => "InventoryState";
         public string PlayerPositionSaveTag => "pos";
+        public string PlayerHealthSaveTag => "health";
     }
 }

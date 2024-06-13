@@ -21,8 +21,8 @@ namespace DefaultNamespace
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (!other.CompareTag(TagManager.Instance.EnemyTag)) return;
-            Destroy(gameObject);
+            if (!other) return;
+            Destroy(gameObject); //sorry unity
         }
     }
 }

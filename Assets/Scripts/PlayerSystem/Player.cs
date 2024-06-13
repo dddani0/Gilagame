@@ -7,9 +7,12 @@ namespace DefaultNamespace
 {
     public class Player : MonoBehaviour, IEntity
     {
+        private CanvasManager _canvasManager;
         private PlayerMovement _playerMovement;
-        private int _health = 3;
+        private IngameManager _ingameManager;
+        private int _health;
         public int Money { get; private set; }
+        private Timer deathTouchTimer; //KELL EGY ILYEN MÉRT
 
         public delegate void PlayerEvent();
 
@@ -17,15 +20,23 @@ namespace DefaultNamespace
 
         private void Start()
         {
+            _health = PlayerPrefs.GetInt(TagManager.Instance.PlayerHealthSaveTag);
+            _canvasManager = GameObject.FindGameObjectWithTag(TagManager.Instance.CanvasManagerTag)
+                .GetComponent<CanvasManager>();
             _playerMovement = GetComponent<PlayerMovement>();
             Money = PlayerPrefs.GetInt("Money");
             PlayerDeath += Die;
+            _ingameManager = GetComponent<IngameManager>();
+            _canvasManager.SetBloodPanelStatus(_health);
+            deathTouchTimer = new Timer(0.1f);
+            _ingameManager = GameObject.FindGameObjectWithTag(TagManager.Instance.IngameManagerTag)
+                .GetComponent<IngameManager>();
         }
 
         private void Update()
         {
-            if (!IsAlive())
-                PlayerDeath?.Invoke();
+            if (deathTouchTimer.IsCooldown()) deathTouchTimer.DecreaseTimer(Time.deltaTime);
+            if (!IsAlive()) PlayerDeath?.Invoke();
         }
 
         private void Die()
@@ -33,16 +44,27 @@ namespace DefaultNamespace
             _playerMovement.GetAnimator().SetBool("isAlive", false);
             _playerMovement.GetRigidbody().velocity = Vector2.zero;
             _playerMovement.enabled = false;
-            //disable crosshair
-            //canvas manager initatiate death menu.
+            _canvasManager.EnableDeathButtons();
+            _ingameManager.EnableCursorVisibility();
             enabled = false;
         }
 
         //IENTITY
-        public void Heal(int addition) => _health += addition;
+        public void Heal(int addition)
+        {
+            _health += addition;
+            _canvasManager.SetBloodPanelStatus(_health);
+            PlayerPrefs.SetInt(TagManager.Instance.PlayerHealthSaveTag, _health);
+        }
+
         public int GetMaxHealth => 3;
 
-        public void Damage(int damage) => _health -= damage;
+        public void Damage(int damage)
+        {
+            _health -= damage;
+            _canvasManager.SetBloodPanelStatus(_health);
+            PlayerPrefs.SetInt(TagManager.Instance.PlayerHealthSaveTag, _health);
+        }
 
         public void IncrementMoney(int value) => Money += value;
         public void DecrementMoney(int value) => Money -= value;
@@ -58,7 +80,7 @@ namespace DefaultNamespace
         {
             if (other is null) return;
             if (other.CompareTag(TagManager.Instance.BulletTag) is false) return;
-            Destroy(other.gameObject);
+            if (deathTouchTimer.IsCooldown()) return;
             Damage(1);
         }
     }

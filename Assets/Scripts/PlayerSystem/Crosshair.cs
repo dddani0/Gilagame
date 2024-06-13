@@ -15,6 +15,10 @@ namespace DefaultNamespace
             _playerShooter = GameObject.FindGameObjectWithTag(TagManager.Instance.PlayerTag)
                 .GetComponent<PlayerShooter>();
             _weaponDisplay = GameObject.FindGameObjectWithTag(TagManager.Instance.WeaponDisplayTag);
+            Player.PlayerDeath += () =>
+            {
+                _isActive = false;
+            };
         }
 
         private void Update()

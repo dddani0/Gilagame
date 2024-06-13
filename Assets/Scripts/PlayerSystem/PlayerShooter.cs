@@ -5,6 +5,7 @@ using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 namespace DefaultNamespace
@@ -16,7 +17,7 @@ namespace DefaultNamespace
         private int _ammunition;
         private int _gunIdx;
         private bool _singleGun;
-        private List<Gun> _gunInventory;
+        public List<Gun> _gunInventory;
         private IngameManager _ingameManager;
 
         private Timer _fireRate;
@@ -32,6 +33,7 @@ namespace DefaultNamespace
         private GameObject _arrow;
         private bool _isArrowEnabled = false;
         private Transform target;
+        private Timer weaponChange;
 
         private void OnEnable()
         {
@@ -56,20 +58,30 @@ namespace DefaultNamespace
             _currentGun = Gun.CreateGun(currentGunState[0], int.Parse(currentGunState[1]),
                 int.Parse(currentGunState[2]),
                 int.Parse(currentGunState[3]));
-            _gunInventory = new List<Gun> { _currentGun };
+            _gunInventory = new List<Gun>();
+            //runs 6 times.
             if (inventoryState.Length > 1)
             {
+                List<string> gunNames = new List<string>();
                 for (int i = 0; i < inventoryState.Length; i++) //because of the extra ';'
                 {
                     var currentIterationOfGun = inventoryState[i].Split("##");
-                    _gunInventory.Add(Gun.CreateGun(
-                            currentIterationOfGun[0].ToString(),
-                            int.Parse(currentIterationOfGun[1]),
-                            int.Parse(currentIterationOfGun[2]),
-                            int.Parse(currentIterationOfGun[3])
-                        )
-                    );
+                    var __currentGun = Gun.CreateGun(
+                        currentIterationOfGun[0].ToString(),
+                        int.Parse(currentIterationOfGun[1]),
+                        int.Parse(currentIterationOfGun[2]),
+                        int.Parse(currentIterationOfGun[3]));
+
+                    if (gunNames.Contains(__currentGun.name) is false)
+                    {
+                        _gunInventory.Add(__currentGun);
+                        gunNames.Add(__currentGun.name);
+                    }
                 }
+            }
+            else
+            {
+                _gunInventory.Add(_currentGun);
             }
 
             UpdateGun();
@@ -80,35 +92,41 @@ namespace DefaultNamespace
             buttonPrompter = transform.GetChild(1).GetComponent<TextMeshPro>();
             buttonPrompter.gameObject.SetActive(false);
             _arrow = transform.GetChild(2).gameObject;
-            changeWeapon.performed += ChangeWeapon;
             _ingameManager = GameObject.Find(TagManager.Instance.IngameManagerTag).GetComponent<IngameManager>();
+            weaponChange = new Timer(0.1f);
         }
 
         public void EquipNewGun(Gun newGun)
         {
-            //Playerpref
             AddGunToInventory(newGun);
             var gunSave = PlayerPrefs.GetString(TagManager.Instance.InventoryStateSaveTag) + _gunInventory.Aggregate("",
                 (current, gon) => current + $";{gon.name}##{gon.ammunition}##{gon.damage}##{gon.fireRate}");
             PlayerPrefs.SetString(TagManager.Instance.InventoryStateSaveTag, gunSave);
         }
 
-        private void ChangeWeapon(InputAction.CallbackContext obj)
+        private void ChangeWeapon()
         {
-            if (_singleGun) return;
+            if (_singleGun is true) return;
+            if (changeWeapon.WasPressedThisFrame() is false) return;
+            if (weaponChange.IsCooldown() is true) return;
             _gunIdx = IncrementGunIndex();
             _currentGun = _gunInventory[_gunIdx];
             UpdateGun();
+            weaponChange.ResetTimer();
         }
 
         private void Update()
         {
             _arrow.SetActive(_isArrowEnabled);
+            _singleGun = _gunInventory.Capacity < 2;
             if (_isArrowEnabled)
             {
                 _arrow.transform.localEulerAngles = new Vector3(0, 0, GetArrowTargetRotation());
             }
-            _singleGun = _gunInventory.Count == 1;
+
+            ChangeWeapon();
+
+            if (weaponChange.IsCooldown()) weaponChange.DecreaseTimer(Time.deltaTime);
             if (_ingameManager.IsActive is false) return;
             if (CanFireGun()) _fireRate.DecreaseTimer(Time.deltaTime);
             if (_fireRate.IsCooldown()) _fireRate.DecreaseTimer(Time.deltaTime);
@@ -129,13 +147,15 @@ namespace DefaultNamespace
 
         private void Shoot(InputAction.CallbackContext obj)
         {
+            if (!SceneManager.GetActiveScene().name.ToLower().Equals("echowavetown") &&
+                !SceneManager.GetActiveScene().name.ToLower().Equals("howto")) return;
             if (_ingameManager.IsActive is false) return;
             if (_ammunition <= 0) return;
             if (_fireRate.IsCooldown()) return;
             //Somehow instantiating with quaternion.euler deforms the rotation.
             //Below is the post-rotation setting, which works.
             //I suspect, that Quaternion.Euler rotates a bit and it alters the rotation.
-            var shot = Instantiate(bullet, transform.position, quaternion.identity);
+            var shot = Instantiate(bullet, GetBulletPosition(), quaternion.identity);
             shot.transform.localEulerAngles = new Vector3(0, 0, GetCrosshairRotation());
             _fireRate.ResetTimer();
             _ammunition--;
@@ -163,6 +183,11 @@ namespace DefaultNamespace
         public void DisableButtonPrompter() => buttonPrompter.gameObject.SetActive(false);
 
         public Vector2 GetPositionVector2() => transform.position;
+
+        public Vector2 GetBulletPosition() => GetPositionVector2() +
+                                              ObjectSpinner.DirectionVector(GetPositionVector2(),
+                                                  GetMousePositionVector2()) * 3;
+
         private bool CanFireGun() => _fireRate.IsCooldown() is false && _ammunition > 0;
         public Vector3 GetMousePosition() => Camera.main!.ScreenToWorldPoint(Mouse.current.position.ReadValue());
         public Vector2 GetMousePositionVector2() => GetMousePosition();
@@ -170,8 +195,8 @@ namespace DefaultNamespace
 
         public int IncrementGunIndex()
         {
-            if (_gunIdx == _gunInventory.Count - 1) return 0;
-            return (_gunIdx + 1);
+            _gunIdx++;
+            return _gunIdx == _gunInventory.Count ? 0 : _gunIdx;
         }
 
         public float GetCrosshairRotation() =>

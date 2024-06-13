@@ -44,6 +44,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44750d5b4de94800a1624db04c83fdd4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   enemies:
   - {fileID: -2859690206624725348, guid: a0bd203ee879b6d4f971cc4779477126, type: 3}
+  enemyEntities:
+  - {fileID: 11400000, guid: b66982f820fb4af4ea2fb24c1a8f3813, type: 2}
+  - {fileID: 11400000, guid: e7b2deefc09e01348bbb07e823758eae, type: 2}
+  - {fileID: 11400000, guid: 6eca3c9ec6147e84c90c124211863bad, type: 2}
+  _spawns: []
   isBountyInProgress: 0
+  exitButton:
+    m_Name: Exit Button
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: f6f93db3-b85f-494c-b1d7-1fc6addbd60f
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 332d64a1-85a8-4f35-aa31-e6edc7780c54
+      m_Path: <Keyboard>/escape
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Exit Button
+      m_Flags: 0
+    m_Flags: 0

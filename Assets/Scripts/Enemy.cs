@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class Enemy : MonoBehaviour, IEntity
 {
     public Entity origin;
-
+    
     //
     private int _health;
     private NavMeshAgent _agent;
@@ -43,6 +43,7 @@ public class Enemy : MonoBehaviour, IEntity
         Player.PlayerDeath += () =>
         {
             _agent.speed = 0;
+            _animator.speed = 0;
             enabled = false;
         };
     }
@@ -56,6 +57,8 @@ public class Enemy : MonoBehaviour, IEntity
         _agent.SetDestination(PlayerPosition());
         ShootTowardsEnemy();
     }
+
+    public void SetEnemy(Entity newEnemy) => origin = newEnemy;
 
     private void LateUpdate()
     {
