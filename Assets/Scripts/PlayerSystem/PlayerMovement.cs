@@ -150,8 +150,7 @@ namespace PlayerSystem
         {
             _collidingObject = null;
         }
-
-        public Animator GetAnimator() => _animation;
+        
         public Rigidbody2D GetRigidbody() => _playerPhysicsRigidbody;
     }
 }

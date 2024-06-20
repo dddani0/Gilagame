@@ -11,6 +11,7 @@ namespace DefaultNamespace
         private PlayerMovement _playerMovement;
         private IngameManager _ingameManager;
         private int _health;
+        private Animator _animator;
         public int Money { get; private set; }
         private Timer deathTouchTimer; //KELL EGY ILYEN MÉRT
 
@@ -29,6 +30,7 @@ namespace DefaultNamespace
             _ingameManager = GetComponent<IngameManager>();
             _canvasManager.SetBloodPanelStatus(_health);
             deathTouchTimer = new Timer(0.1f);
+            _animator = transform.GetChild(0).GetComponent<Animator>();
             _ingameManager = GameObject.FindGameObjectWithTag(TagManager.Instance.IngameManagerTag)
                 .GetComponent<IngameManager>();
         }
@@ -41,7 +43,7 @@ namespace DefaultNamespace
 
         private void Die()
         {
-            _playerMovement.GetAnimator().SetBool("isAlive", false);
+            _animator.SetBool("isAlive", false);
             _playerMovement.GetRigidbody().velocity = Vector2.zero;
             _playerMovement.enabled = false;
             _canvasManager.EnableDeathButtons();

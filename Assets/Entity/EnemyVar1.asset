@@ -15,4 +15,4 @@ MonoBehaviour:
   name: 
   health: 1
   speed: 3
-  distance: 6
+  distance: 10

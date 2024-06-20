@@ -15,4 +15,4 @@ MonoBehaviour:
   name: Basil
   health: 4
   speed: 2
-  distance: 4
+  distance: 10
